@@ -15,6 +15,10 @@
             width: 100%;
             height: 400px;
         }
+        .latest-data {
+            font-size: 16px;
+            margin-top: 10px;
+        }
     </style>
 </head>
 <body>
@@ -22,9 +26,16 @@
 <h1>人口互動式儀表板</h1>
 
 <div id="birthDeathChart" class="chart"></div>
+<div class="latest-data" id="latestBirthDeathData"></div>
+
 <div id="increaseComparisonChart" class="chart"></div>
+<div class="latest-data" id="latestIncreaseData"></div>
+
 <div id="populationChangeChart" class="chart"></div>
+<div class="latest-data" id="latestPopulationData"></div>
+
 <div id="marriagePopulationRelationChart" class="chart"></div>
+<div class="latest-data" id="latestMarriageData"></div>
 
 <script>
 // 使用Fetch API加載JSON數據
@@ -85,6 +96,10 @@ function createDashboard(data) {
 
     Plotly.newPlot('birthDeathChart', [birthDeathTrace1, birthDeathTrace2], birthDeathLayout);
 
+    // 顯示最新的出生和死亡數據
+    document.getElementById('latestBirthDeathData').innerText =
+        `最新出生人數：${birthData[birthData.length - 1]} | 最新死亡人數：${deathData[deathData.length - 1]}`;
+
     // 自然增加與社會增加對比圖
     const increaseTrace1 = {
         x: months,
@@ -109,6 +124,10 @@ function createDashboard(data) {
 
     Plotly.newPlot('increaseComparisonChart', [increaseTrace1, increaseTrace2], increaseLayout);
 
+    // 顯示最新的自然增加和社會增加數據
+    document.getElementById('latestIncreaseData').innerText =
+        `最新自然增加：${natureIncreaseData[natureIncreaseData.length - 1]} | 最新社會增加：${socialIncreaseData[socialIncreaseData.length - 1]}`;
+
     // 總人口變化動態圖
     const populationChangeTrace = {
         x: months,
@@ -124,6 +143,10 @@ function createDashboard(data) {
     };
 
     Plotly.newPlot('populationChangeChart', [populationChangeTrace], populationChangeLayout);
+
+    // 顯示最新的總人口數據
+    document.getElementById('latestPopulationData').innerText =
+        `最新總人口：${totalPopulationData[totalPopulationData.length - 1]}`;
 
     // 婚姻數量與總人口關係圖
     const marriagePopulationTrace = {
@@ -141,9 +164,14 @@ function createDashboard(data) {
     };
 
     Plotly.newPlot('marriagePopulationRelationChart', [marriagePopulationTrace], marriagePopulationLayout);
+
+   // 顯示最新的婚姻數量和總人口數據
+   document.getElementById('latestMarriageData').innerText =
+       `最新婚姻數量：${marriageData[marriageData.length - 1]}`;
 }
 </script>
 
 </body>
 </html>
+
 
