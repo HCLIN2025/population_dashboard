@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>人口互動式儀表板</title>
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -19,16 +22,26 @@
             font-size: 16px;
             margin-top: 10px;
         }
+        .slider-container {
+            margin-bottom: 20px;
+        }
     </style>
 </head>
 <body>
 
 <h1>人口互動式儀表板</h1>
 
-<!-- 年月選擇器 -->
-<label for="monthPicker">選擇年月:</label>
-<input type="month" id="monthPicker" value="2021-01">
-<button id="filterButton">篩選資料</button>
+<div class="slider-container">
+    <label for="yearSlider">選擇年份:</label>
+    <div id="yearSlider"></div>
+    <span id="selectedYear">2021</span>
+    
+    <label for="monthSlider">選擇月份:</label>
+    <div id="monthSlider"></div>
+    <span id="selectedMonth">1</span>
+    
+    <button id="filterButton">篩選資料</button>
+</div>
 
 <div id="birthDeathChart" class="chart"></div>
 <div class="latest-data" id="latestBirthDeathData"></div>
@@ -164,13 +177,34 @@ function createDashboard(data) {
    Plotly.newPlot('marriagePopulationRelationChart', [marriagePopulationTrace], marriagePopulationLayout);
 }
 
+// 初始化年份和月份滑動條
+$(function() {
+    $("#yearSlider").slider({
+        min: 2021,
+        max: 2024,
+        value: 2021,
+        slide(event, ui) {
+            $("#selectedYear").text(ui.value);
+        }
+    });
+
+    $("#monthSlider").slider({
+        min: 1,
+        max: 12,
+        value: 1,
+        slide(event, ui) {
+            $("#selectedMonth").text(ui.value);
+        }
+    });
+});
+
 // 篩選資料函數
 document.getElementById('filterButton').addEventListener('click', () => {
-    const selectedDate = document.getElementById('monthPicker').value; // 獲取選擇的年月
-    const [year, month] = selectedDate.split('-'); // 分割為年和月
+    const selectedYear = parseInt($("#yearSlider").slider("value"));
+    const selectedMonth = parseInt($("#monthSlider").slider("value"));
     
     // 篩選資料邏輯
-    const filteredData = window.data.filter(item => item.YEAR == year && item.MONTH == month);
+    const filteredData = window.data.filter(item => item.YEAR === selectedYear && item.MONTH === selectedMonth);
 
     createDashboard(filteredData); // 使用篩選後的資料重新創建儀表板
 });
