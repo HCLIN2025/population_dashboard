@@ -57,4 +57,93 @@ function createDashboard(data) {
         birthData.push(item.BIRTH);
         deathData.push(item.DEATH);
         natureIncreaseData.push(item['NATURE INCREASE']);
-        socialIncreaseData.push
+        socialIncreaseData.push(item['SOCIAL INCREASE']);
+        marriageData.push(item.MARRIAGE);
+        totalPopulationData.push(item.POPULATION);
+    });
+
+    // 出生與死亡趨勢圖
+    const birthDeathTrace1 = {
+        x: months,
+        y: birthData,
+        mode: 'lines+markers',
+        name: '出生人數'
+    };
+
+    const birthDeathTrace2 = {
+        x: months,
+        y: deathData,
+        mode: 'lines+markers',
+        name: '死亡人數'
+    };
+
+    const birthDeathLayout = {
+        title: '每月出生與死亡人數',
+        xaxis: { title: '月份' },
+        yaxis: { title: '人數' }
+    };
+
+    Plotly.newPlot('birthDeathChart', [birthDeathTrace1, birthDeathTrace2], birthDeathLayout);
+
+    // 自然增加與社會增加對比圖
+    const increaseTrace1 = {
+        x: months,
+        y: natureIncreaseData,
+        type: 'bar',
+        name: '自然增加'
+    };
+
+    const increaseTrace2 = {
+        x: months,
+        y: socialIncreaseData,
+        type: 'bar',
+        name: '社會增加'
+    };
+
+    const increaseLayout = {
+        title: '自然增加與社會增加對比',
+        barmode: 'group',
+        xaxis: { title: '月份' },
+        yaxis: { title: '人數' }
+    };
+
+    Plotly.newPlot('increaseComparisonChart', [increaseTrace1, increaseTrace2], increaseLayout);
+
+    // 總人口變化動態圖
+    const populationChangeTrace = {
+        x: months,
+        y: totalPopulationData,
+        mode: 'lines+markers',
+        name: '總人口'
+    };
+
+    const populationChangeLayout = {
+        title: '每月總人口變化',
+        xaxis: { title: '月份' },
+        yaxis: { title: '總人口' }
+    };
+
+    Plotly.newPlot('populationChangeChart', [populationChangeTrace], populationChangeLayout);
+
+    // 婚姻數量與總人口關係圖
+    const marriagePopulationTrace = {
+        x: marriageData,
+        y: totalPopulationData,
+        mode: 'markers',
+        type: 'scatter',
+        name: '婚姻數量 vs 總人口'
+    };
+
+    const marriagePopulationLayout = {
+        title: '婚姻數量與總人口關係',
+        xaxis: { title: '婚姻數量' },
+        yaxis: { title: '總人口' }
+    };
+
+    Plotly.newPlot('marriagePopulationRelationChart', [marriagePopulationTrace], marriagePopulationLayout);
+}
+</script>
+
+</body>
+</html>
+
