@@ -25,11 +25,9 @@
 
 <h1>人口互動式儀表板</h1>
 
-<!-- 日期選擇器 -->
-<label for="startDate">開始日期:</label>
-<input type="date" id="startDate">
-<label for="endDate">結束日期:</label>
-<input type="date" id="endDate">
+<!-- 年月選擇器 -->
+<label for="monthPicker">選擇年月:</label>
+<input type="month" id="monthPicker" value="2021-01">
 <button id="filterButton">篩選資料</button>
 
 <div id="birthDeathChart" class="chart"></div>
@@ -69,10 +67,10 @@ function createDashboard(data) {
     const socialIncreaseData = [];
     const marriageData = [];
     const totalPopulationData = [];
+    
     const months = data.map(item => `${item.YEAR}-${item.MONTH}`);
 
     data.forEach(item => {
-        // 直接將數字推入數組
         birthData.push(item.BIRTH);
         deathData.push(item.DEATH);
         natureIncreaseData.push(item['NATURE INCREASE']);
@@ -108,35 +106,30 @@ function createDashboard(data) {
     document.getElementById('latestBirthDeathData').innerText =
         `最新出生人數：${birthData[birthData.length - 1]} | 最新死亡人數：${deathData[deathData.length - 1]}`;
 
-    // 自然增加與社會增加對比圖
-    const increaseTrace1 = {
-        x: months,
-        y: natureIncreaseData,
-        type: 'bar',
-        name: '自然增加'
-    };
+   // 自然增加與社會增加對比圖
+   const increaseTrace1 = {
+       x: months,
+       y: natureIncreaseData,
+       type: 'bar',
+       name: '自然增加'
+   };
 
-    const increaseTrace2 = {
-        x: months,
-        y: socialIncreaseData,
-        type: 'bar',
-        name: '社會增加'
-    };
+   const increaseTrace2 = {
+       x: months,
+       y: socialIncreaseData,
+       type: 'bar',
+       name: '社會增加'
+   };
 
-    const increaseLayout = {
-        title: '自然增加與社會增加對比',
-        barmode: 'group',
-        xaxis: { title: '月份' },
-        yaxis: { title: '人數' }
-    };
+   const increaseLayout = {
+       title: '自然增加與社會增加對比',
+       barmode: 'group',
+       xaxis: { title: '月份' },
+       yaxis: { title: '人數' }
+   };
 
-    Plotly.newPlot('increaseComparisonChart', [increaseTrace1, increaseTrace2], increaseLayout);
+   Plotly.newPlot('increaseComparisonChart', [increaseTrace1, increaseTrace2], increaseLayout);
 
-    // 顯示最新的自然增加和社會增加數據
-    document.getElementById('latestIncreaseData').innerText =
-        `最新自然增加：${natureIncreaseData[natureIncreaseData.length - 1]} | 最新社會增加：${socialIncreaseData[socialIncreaseData.length - 1]}`;
-
-    
    // 總人口變化動態圖
    const populationChangeTrace = {
        x: months,
@@ -152,10 +145,6 @@ function createDashboard(data) {
    };
 
    Plotly.newPlot('populationChangeChart', [populationChangeTrace], populationChangeLayout);
-
-   // 顯示最新的總人口數據
-   document.getElementById('latestPopulationData').innerText =
-       `最新總人口：${totalPopulationData[totalPopulationData.length - 1]}`;
 
    // 婚姻數量與總人口關係圖
    const marriagePopulationTrace = {
@@ -173,22 +162,15 @@ function createDashboard(data) {
    };
 
    Plotly.newPlot('marriagePopulationRelationChart', [marriagePopulationTrace], marriagePopulationLayout);
-
-   // 顯示最新的婚姻數量和總人口數據
-   document.getElementById('latestMarriageData').innerText =
-       `最新婚姻數量：${marriageData[marriageData.length - 1]}`;
 }
 
 // 篩選資料函數
 document.getElementById('filterButton').addEventListener('click', () => {
-    const startDate = new Date(document.getElementById('startDate').value);
-    const endDate = new Date(document.getElementById('endDate').value);
+    const selectedDate = document.getElementById('monthPicker').value; // 獲取選擇的年月
+    const [year, month] = selectedDate.split('-'); // 分割為年和月
     
     // 篩選資料邏輯
-    const filteredData = window.data.filter(item => {
-      const itemDate = new Date(`${item.YEAR}-${item.MONTH}-01`);
-      return itemDate >= startDate && itemDate <= endDate;
-    });
+    const filteredData = window.data.filter(item => item.YEAR == year && item.MONTH == month);
 
     createDashboard(filteredData); // 使用篩選後的資料重新創建儀表板
 });
@@ -196,6 +178,7 @@ document.getElementById('filterButton').addEventListener('click', () => {
 
 </body>
 </html>
+
 
 
 
