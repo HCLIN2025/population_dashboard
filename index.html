@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="zh">
+<html lang="zh-Hant">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>人口互動式儀表板r</title>
+    <title>人口互動式儀表板</title>
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
     <style>
         body {
@@ -19,7 +19,7 @@
 </head>
 <body>
 
-<h1>人口互動式儀表板r</h1>
+<h1>人口互動式儀表板</h1>
 
 <div id="birthDeathChart" class="chart"></div>
 <div id="increaseComparisonChart" class="chart"></div>
@@ -27,22 +27,22 @@
 <div id="marriagePopulationRelationChart" class="chart"></div>
 
 <script>
-// 使用Fetch API加载JSON数据
-fetch('https://raw.githubusercontent.com/HCLIN2025/population_dashboard/refs/heads/main/data.json') // 使用原始链接
+// 使用Fetch API加載JSON數據
+fetch('https://raw.githubusercontent.com/HCLIN2025/population_dashboard/main/data.json') // 使用原始鏈接
     .then(response => {
         if (!response.ok) {
-            throw new Error('Network response was not ok');
+            throw new Error('網絡響應出錯');
         }
         return response.json();
     })
     .then(data => {
-        createDashboard(data); // 调用创建仪表板的函数
+        createDashboard(data); // 調用創建儀表板的函數
     })
     .catch(error => {
-        console.error('There has been a problem with your fetch operation:', error);
+        console.error('獲取數據時出現問題:', error);
     });
 
-// 创建仪表板的函数
+// 創建儀表板的函數
 function createDashboard(data) {
     const birthData = [];
     const deathData = [];
@@ -53,105 +53,8 @@ function createDashboard(data) {
     const months = data.map(item => `${item.YEAR}-${item.MONTH}`);
 
     data.forEach(item => {
-        // 确保将值转换为字符串再进行替换
-        birthData.push(parseInt(item.BIRTH.replace(/,/g, ''), 10));
-        deathData.push(parseInt(item.DEATH.replace(/,/g, ''), 10));
-
-        // 检查是否为字符串，如果不是则转换为字符串
-        const natureIncreaseValue = typeof item['NATURE INCREASE'] === 'string' ? item['NATURE INCREASE'] : item['NATURE INCREASE'].toString();
-        natureIncreaseData.push(parseInt(natureIncreaseValue.replace(/,/g, ''), 10));
-
-        const socialIncreaseValue = typeof item['SOCIAL INCREASE'] === 'string' ? item['SOCIAL INCREASE'] : item['SOCIAL INCREASE'].toString();
-        socialIncreaseData.push(parseInt(socialIncreaseValue.replace(/,/g, ''), 10));
-
-        marriageData.push(item.MARRIAGE);
-        totalPopulationData.push(item.POPULATION);
-    });
-
-    // 出生与死亡趋势图
-    const birthDeathTrace1 = {
-        x: months,
-        y: birthData,
-        mode: 'lines+markers',
-        name: '出生人数'
-    };
-
-    const birthDeathTrace2 = {
-        x: months,
-        y: deathData,
-        mode: 'lines+markers',
-        name: '死亡人数'
-    };
-
-    const birthDeathLayout = {
-        title: '每月出生与死亡人数',
-        xaxis: { title: '月份' },
-        yaxis: { title: '人数' }
-    };
-
-    Plotly.newPlot('birthDeathChart', [birthDeathTrace1, birthDeathTrace2], birthDeathLayout);
-
-    // 自然增加与社会增加对比图
-    const increaseTrace1 = {
-        x: months,
-        y: natureIncreaseData,
-        type: 'bar',
-        name: '自然增加'
-    };
-
-    const increaseTrace2 = {
-        x: months,
-        y: socialIncreaseData,
-        type: 'bar',
-        name: '社会增加'
-    };
-
-    const increaseLayout = {
-        title: '自然增加与社会增加对比',
-        barmode: 'group',
-        xaxis: { title: '月份' },
-        yaxis: { title: '人数' }
-    };
-
-    Plotly.newPlot('increaseComparisonChart', [increaseTrace1, increaseTrace2], increaseLayout);
-
-    // 总人口变化动态图
-    const populationChangeTrace = {
-        x: months,
-        y: totalPopulationData,
-        mode: 'lines+markers',
-        name: '总人口'
-    };
-
-    const populationChangeLayout = {
-        title: '每月总人口变化',
-        xaxis: { title: '月份' },
-        yaxis: { title: '总人口' }
-    };
-
-    Plotly.newPlot('populationChangeChart', [populationChangeTrace], populationChangeLayout);
-
-    // 婚姻数量与总人口关系图
-    const marriagePopulationTrace = {
-        x: marriageData,
-        y: totalPopulationData,
-        mode: 'markers',
-        type: 'scatter',
-        name: '婚姻数量 vs 总人口'
-    };
-
-    const marriagePopulationLayout = {
-        title: '婚姻数量与总人口关系',
-        xaxis: { title: '婚姻数量' },
-        yaxis: { title: '总人口' }
-    };
-
-    Plotly.newPlot('marriagePopulationRelationChart', [marriagePopulationTrace], marriagePopulationLayout);
-}
-</script>
-
-</body>
-</html>
-
-
-
+        // 直接將數字推入數組
+        birthData.push(item.BIRTH);
+        deathData.push(item.DEATH);
+        natureIncreaseData.push(item['NATURE INCREASE']);
+        socialIncreaseData.push
