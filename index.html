@@ -55,8 +55,14 @@ function createDashboard(data) {
     data.forEach(item => {
         birthData.push(parseInt(item.BIRTH.replace(/,/g, ''), 10));
         deathData.push(parseInt(item.DEATH.replace(/,/g, ''), 10));
-        natureIncreaseData.push(parseInt(item['NATURE INCREASE'].replace(/,/g, ''), 10));
-        socialIncreaseData.push(parseInt(item['SOCIAL INCREASE'].replace(/,/g, ''), 10));
+
+        // 检查并转换数据类型
+        const natureIncreaseValue = typeof item['NATURE INCREASE'] === 'string' ? item['NATURE INCREASE'] : item['NATURE INCREASE'].toString();
+        natureIncreaseData.push(parseInt(natureIncreaseValue.replace(/,/g, ''), 10));
+
+        const socialIncreaseValue = typeof item['SOCIAL INCREASE'] === 'string' ? item['SOCIAL INCREASE'] : item['SOCIAL INCREASE'].toString();
+        socialIncreaseData.push(parseInt(socialIncreaseValue.replace(/,/g, ''), 10));
+
         marriageData.push(item.MARRIAGE);
         totalPopulationData.push(item.POPULATION);
     });
@@ -145,4 +151,5 @@ function createDashboard(data) {
 
 </body>
 </html>
+
 
