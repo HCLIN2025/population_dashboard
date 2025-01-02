@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>人口互動式儀表板</title>
+    <title>人口互動式儀表板r</title>
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
     <style>
         body {
@@ -19,7 +19,7 @@
 </head>
 <body>
 
-<h1>人口互動式儀表板</h1>
+<h1>人口互動式儀表板r</h1>
 
 <div id="birthDeathChart" class="chart"></div>
 <div id="increaseComparisonChart" class="chart"></div>
@@ -53,10 +53,11 @@ function createDashboard(data) {
     const months = data.map(item => `${item.YEAR}-${item.MONTH}`);
 
     data.forEach(item => {
+        // 确保将值转换为字符串再进行替换
         birthData.push(parseInt(item.BIRTH.replace(/,/g, ''), 10));
         deathData.push(parseInt(item.DEATH.replace(/,/g, ''), 10));
 
-        // 检查并转换数据类型
+        // 检查是否为字符串，如果不是则转换为字符串
         const natureIncreaseValue = typeof item['NATURE INCREASE'] === 'string' ? item['NATURE INCREASE'] : item['NATURE INCREASE'].toString();
         natureIncreaseData.push(parseInt(natureIncreaseValue.replace(/,/g, ''), 10));
 
@@ -151,5 +152,6 @@ function createDashboard(data) {
 
 </body>
 </html>
+
 
 
