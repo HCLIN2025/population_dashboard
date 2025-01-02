@@ -25,6 +25,13 @@
 
 <h1>人口互動式儀表板</h1>
 
+<!-- 日期選擇器 -->
+<label for="startDate">開始日期:</label>
+<input type="date" id="startDate">
+<label for="endDate">結束日期:</label>
+<input type="date" id="endDate">
+<button id="filterButton">篩選資料</button>
+
 <div id="birthDeathChart" class="chart"></div>
 <div class="latest-data" id="latestBirthDeathData"></div>
 
@@ -47,6 +54,7 @@ fetch('https://raw.githubusercontent.com/HCLIN2025/population_dashboard/main/dat
         return response.json();
     })
     .then(data => {
+        window.data = data; // 將數據存儲在全局變量中
         createDashboard(data); // 調用創建儀表板的函數
     })
     .catch(error => {
@@ -96,11 +104,9 @@ function createDashboard(data) {
 
     Plotly.newPlot('birthDeathChart', [birthDeathTrace1, birthDeathTrace2], birthDeathLayout);
 
-    // 顯示最新的出生和死亡數據及變動
+    // 顯示最新的出生和死亡數據
     document.getElementById('latestBirthDeathData').innerText =
-        `最新出生人數：${birthData[birthData.length - 1]} | 最新死亡人數：${deathData[deathData.length - 1]}` +
-        `\n與上個月變動：出生人數變動 ${birthData[birthData.length - 1] - birthData[birthData.length - 2]} | 死亡人數變動 ${deathData[deathData.length - 1] - deathData[deathData.length - 2]}` +
-        `\n與去年同月變動：出生人數變動 ${birthData[birthData.length - 1] - birthData[birthData.length - 13]} | 死亡人數變動 ${deathData[deathData.length - 1] - deathData[deathData.length - 13]}`;
+        `最新出生人數：${birthData[birthData.length - 1]} | 最新死亡人數：${deathData[deathData.length - 1]}`;
 
     // 自然增加與社會增加對比圖
     const increaseTrace1 = {
@@ -126,11 +132,9 @@ function createDashboard(data) {
 
     Plotly.newPlot('increaseComparisonChart', [increaseTrace1, increaseTrace2], increaseLayout);
 
-    // 顯示最新的自然增加和社會增加數據及變動
+    // 顯示最新的自然增加和社會增加數據
     document.getElementById('latestIncreaseData').innerText =
-        `最新自然增加：${natureIncreaseData[natureIncreaseData.length - 1]} | 最新社會增加：${socialIncreaseData[socialIncreaseData.length - 1]}` +
-        `\n與上個月變動：自然增加變動 ${natureIncreaseData[natureIncreaseData.length - 1] - natureIncreaseData[natureIncreaseData.length - 2]} | 社會增加變動 ${socialIncreaseData[socialIncreaseData.length - 1] - socialIncreaseData[socialIncreaseData.length - 2]}` +
-        `\n與去年同月變動：自然增加變動 ${natureIncreaseData[natureIncreaseData.length - 1] - natureIncreaseData[natureIncreaseData.length - 13]} | 社會增加變動 ${socialIncreaseData[socialIncreaseData.length - 1] - socialIncreaseData[socialIncreaseData.length - 13]}`;
+        `最新自然增加：${natureIncreaseData[natureIncreaseData.length - 1]} | 最新社會增加：${socialIncreaseData[socialIncreaseData.length - 1]}`;
 
     
    // 總人口變化動態圖
@@ -149,11 +153,9 @@ function createDashboard(data) {
 
    Plotly.newPlot('populationChangeChart', [populationChangeTrace], populationChangeLayout);
 
-   // 顯示最新的總人口數據及變動
+   // 顯示最新的總人口數據
    document.getElementById('latestPopulationData').innerText =
-       `最新總人口：${totalPopulationData[totalPopulationData.length - 1]}` +
-       `\n與上個月變動：總人口變動 ${totalPopulationData[totalPopulationData.length - 1] - totalPopulationData[totalPopulationData.length - 2]}` +
-       `\n與去年同月變動：總人口變動 ${totalPopulationData[totalPopulationData.length - 1] - totalPopulationData[totalPopulationData.length - 13]}`;
+       `最新總人口：${totalPopulationData[totalPopulationData.length - 1]}`;
 
    // 婚姻數量與總人口關係圖
    const marriagePopulationTrace = {
@@ -176,10 +178,25 @@ function createDashboard(data) {
    document.getElementById('latestMarriageData').innerText =
        `最新婚姻數量：${marriageData[marriageData.length - 1]}`;
 }
+
+// 篩選資料函數
+document.getElementById('filterButton').addEventListener('click', () => {
+    const startDate = new Date(document.getElementById('startDate').value);
+    const endDate = new Date(document.getElementById('endDate').value);
+    
+    // 篩選資料邏輯
+    const filteredData = window.data.filter(item => {
+      const itemDate = new Date(`${item.YEAR}-${item.MONTH}-01`);
+      return itemDate >= startDate && itemDate <= endDate;
+    });
+
+    createDashboard(filteredData); // 使用篩選後的資料重新創建儀表板
+});
 </script>
 
 </body>
 </html>
+
 
 
 
