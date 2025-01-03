@@ -320,12 +320,16 @@ function createDashboard(data) {
     const naturalIncrease = data.map(item => item['NATURE INCREASE']);
     const socialIncrease = data.map(item => item['SOCIAL INCREASE']);
     Plotly.newPlot('increaseComparisonChart', [
-        { x: months, y: naturalIncrease, mode: 'lines+markers', name: '自然增加' },
-        { x: months, y: socialIncrease, mode: 'lines+markers', name: '社會增加' }
+        { x: months, y: naturalIncrease, type: 'bar', name: '自然增加' ,
+        marker: { color: 'blue'}},
+        { x: months, y: socialIncrease, type: 'bar', name: '社會增加' ,
+        marker: { color: 'orange' }}
     ], {
         title: '自然增加與社會增加',
         xaxis: { title: '月份' },
-        yaxis: { title: '人數' }
+        yaxis: { title: '人數' },
+        barmode: 'group', // 設定長條圖的顯示模式
+        legend: { orientation: 'h' }
     });
 
     // 總人口變化圖
