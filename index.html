@@ -340,15 +340,28 @@ function createDashboard(data) {
 
     // 出生數與結婚對數趨勢圖
     const births = data.map(item => item.BIRTH);
-    const marriage = data.map(item => item.MARRIAGE);
+    const marriages = data.map(item => item.MARRIAGE);
 
     Plotly.newPlot('marriagePopulationRelationChart', [
-        { x: months, y: births, mode: 'lines+markers', name: '出生數' },
-        { x: months, y: marriage, mode: 'lines+markers', name: '結婚對數' }
+    {
+        x: months,
+        y: births,
+        type: 'bar',
+        name: '出生數',
+        marker: { color: 'blue' }
+    },
+    {
+        x: months,
+        y: marriages,
+        type: 'bar',
+        name: '結婚對數',
+        marker: { color: 'orange' }
+    }
     ], {
         title: '出生數與結婚對數趨勢',
         xaxis: { title: '月份' },
         yaxis: { title: '數量' },
+        barmode: 'group', // 設定長條圖的顯示模式
         legend: { orientation: 'h' }
     });
 }
