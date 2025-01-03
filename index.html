@@ -213,6 +213,8 @@
 <div id="populationChangeChart" class="chart"></div>
 <div id="marriagePopulationRelationChart" class="chart"></div>
 
+
+
 <script>
 // 假設 rawData 是從 API 獲取的數據
 let rawData = [];
@@ -234,37 +236,43 @@ function displayLatestData() {
     const previousYear = rawData.find(item => item.YEAR === latest.YEAR - 1 && item.MONTH === latest.MONTH) || {};
 
     document.getElementById('birthData').innerText = latest.BIRTH;
-    document.getElementById('birthComparison').innerHTML = `
+    document.getElementById('birthComparison').innerHTML = 
         與上月比較：${(latest.BIRTH - (previousMonth.BIRTH || 0))}<br>
         與去年同月比較：${(latest.BIRTH - (previousYear.BIRTH || 0))}
-    `;
+    ;
 
     document.getElementById('deathData').innerText = latest.DEATH;
-    document.getElementById('deathComparison').innerHTML = `
+    document.getElementById('deathComparison').innerHTML = 
         與上月比較：${(latest.DEATH - (previousMonth.DEATH || 0))}<br>
         與去年同月比較：${(latest.DEATH - (previousYear.DEATH || 0))}
-    `;
+    ;
 
     document.getElementById('populationData').innerText = latest.POPULATION;
-    document.getElementById('populationComparison').innerHTML = `
+    document.getElementById('populationComparison').innerHTML = 
         與上月比較：${(latest.POPULATION - (previousMonth.POPULATION || 0))}<br>
         與去年同月比較：${(latest.POPULATION - (previousYear.POPULATION || 0))}
-    `;
+    ;
 
     document.getElementById('naturalIncreaseData').innerText = latest['NATURE INCREASE'];
-    document.getElementById('naturalIncreaseComparison').innerHTML = `
+    document.getElementById('naturalIncreaseComparison').innerHTML = 
         與上月比較：${(latest['NATURE INCREASE'] - (previousMonth['NATURE INCREASE'] || 0))}<br>
         與去年同月比較：${(latest['NATURE INCREASE'] - (previousYear['NATURE INCREASE'] || 0))}
-    `;
+    ;
 
     document.getElementById('socialIncreaseData').innerText = latest['SOCIAL INCREASE'];
-    document.getElementById('socialIncreaseComparison').innerHTML = `
+    document.getElementById('socialIncreaseComparison').innerHTML = 
         與上月比較：${(latest['SOCIAL INCREASE'] - (previousMonth['SOCIAL INCREASE'] || 0))}<br>
         與去年同月比較：${(latest['SOCIAL INCREASE'] - (previousYear['SOCIAL INCREASE'] || 0))}
-    `;
+    ;
+
+    document.getElementById('birthTitle').innerText = ${latest.YEAR}年${latest.MONTH}月出生人數;
+    document.getElementById('deathTitle').innerText = ${latest.YEAR}年${latest.MONTH}月死亡人數;
+    document.getElementById('populationTitle').innerText = ${latest.YEAR}年${latest.MONTH}月總人口數;
+    document.getElementById('naturalIncreaseTitle').innerText = ${latest.YEAR}年${latest.MONTH}月自然增加;
+    document.getElementById('socialIncreaseTitle').innerText = ${latest.YEAR}年${latest.MONTH}月社會增加;
 }
 
-// 初始化時間篩選器
+// 初始化滑動條
 function initializeSlider() {
     const timeLabels = rawData.map(item => ${item.YEAR}-${String(item.MONTH).padStart(2, '0')});
 
@@ -305,12 +313,12 @@ function createDashboard(data) {
         { x: months, y: birthData, mode: 'lines+markers', name: '出生人數' },
         { x: months, y: deathData, mode: 'lines+markers', name: '死亡人數' }
     ], {
-        title: '出生人數與死亡人數',
+        title: '出生與死亡人數',
         xaxis: { title: '月份' },
         yaxis: { title: '人數' }
     });
-    // 自然與社會增加對比圖
-    const naturalIncrease = data.map(item => item['NATURE INCREASE']);
+// 自然與社會增加對比圖
+const naturalIncrease = data.map(item => item['NATURE INCREASE']);
     const socialIncrease = data.map(item => item['SOCIAL INCREASE']);
     Plotly.newPlot('increaseComparisonChart', [
         { x: months, y: naturalIncrease, mode: 'lines+markers', name: '自然增加' },
@@ -331,7 +339,7 @@ function createDashboard(data) {
         yaxis: { title: '人數' }
     });
 
-    // 婚姻變化圖
+    // 婚姻狀況
     const marriages = data.map(item => item.MARRIAGES);
     Plotly.newPlot('marriagePopulationRelationChart', [
         { x: months, y: marriages, mode: 'lines+markers', name: '結婚對數' }
@@ -344,7 +352,6 @@ function createDashboard(data) {
 </script>
 </body>
 </html>
-
 
 
 
