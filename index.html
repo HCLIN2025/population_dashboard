@@ -86,6 +86,39 @@
     </div>
 </div>
 
+<div class="cumulative-container">
+    <div class="data-box birth">
+        <h2 id="cumulativeBirthTitle">2024年出生人數(累計至12月)</h2>
+        <p class="data-value" id="cumulativeBirthData">0</p>
+        <p id="cumulativeBirthComparison">與去年同期比較: 0</p>
+    </div>
+
+    <div class="data-box death">
+        <h2 id="cumulativeDeathTitle">2024年死亡人數(累計至12月)</h2>
+        <p class="data-value" id="cumulativeDeathData">0</p>
+        <p id="cumulativeDeathComparison">與去年同期比較: 0</p>
+    </div>
+
+    <div class="data-box population">
+        <h2 id="cumulativePopulationTitle">2024年總人口數(至12月)</h2>
+        <p class="data-value" id="cumulativePopulationData">0</p>
+        <p id="cumulativePopulationComparison">與去年年底比較: 0</p>
+    </div>
+
+    <div class="data-box natural-increase">
+        <h2 id="cumulativeNaturalIncreaseTitle">2024年自然增加(累計至12月)</h2>
+        <p class="data-value" id="cumulativeNaturalIncreaseData">0</p>
+        <p id="cumulativeNaturalIncreaseComparison">與去年同期比較: 0</p>
+    </div>
+
+    <div class="data-box social-increase">
+        <h2 id="cumulativeSocialIncreaseTitle">2024年社會增加(累計至12月)</h2>
+        <p class="data-value" id="cumulativeSocialIncreaseData">0</p>
+        <p id="cumulativeSocialIncreaseComparison">與去年同期比較: 0</p>
+    </div>
+</div>
+
+
 <div class="slider-container">
     <label for="timeRangeSlider">選擇時間範圍:</label>
     <div id="timeRangeSlider"></div>
@@ -107,6 +140,7 @@ fetch('https://raw.githubusercontent.com/HCLIN2025/population_dashboard/main/dat
     .then(data => {
         rawData = data;
         displayLatestData();
+        displayCumulativeData();
         initializeSlider();
         createDashboard(data);
     });
@@ -147,11 +181,46 @@ function displayLatestData() {
         與去年同月比較：${(latest['SOCIAL INCREASE'] - (previousYear['SOCIAL INCREASE'] || 0))}
     `;
 
-    document.getElementById('birthTitle').innerText = `${latest.YEAR}年${latest.MONTH}月出生人數`;
-    document.getElementById('deathTitle').innerText = `${latest.YEAR}年${latest.MONTH}月死亡人數`;
-    document.getElementById('populationTitle').innerText = `${latest.YEAR}年${latest.MONTH}月總人口數`;
-    document.getElementById('naturalIncreaseTitle').innerText = `${latest.YEAR}年${latest.MONTH}月自然增加`;
-    document.getElementById('socialIncreaseTitle').innerText = `${latest.YEAR}年${latest.MONTH}月社會增加`;
+    document.getElementById('birthTitle').innerText = `${latest.YEAR}年${latest.MONTH}月最新出生人數`;
+    document.getElementById('deathTitle').innerText = `${latest.YEAR}年${latest.MONTH}月最新死亡人數`;
+    document.getElementById('populationTitle').innerText = `${latest.YEAR}年${latest.MONTH}月最新總人口數`;
+    document.getElementById('naturalIncreaseTitle').innerText = `${latest.YEAR}年${latest.MONTH}月最新自然增加`;
+    document.getElementById('socialIncreaseTitle').innerText = `${latest.YEAR}年${latest.MONTH}月最新社會增加`;
+}
+
+
+// 顯示最新年度累計數據
+function displayCumulativeData() {
+    const currentYear = new Date().getFullYear();
+    const currentData = rawData.filter(item => item.YEAR === currentYear);
+    const previousYearData = rawData.filter(item => item.YEAR === currentYear - 1);
+
+    const sumCurrent = calculateSum(currentData);
+    const sumPrevious = calculateSum(previousYearData);
+
+    document.getElementById('cumulativeBirthData').innerText = sumCurrent.BIRTH;
+    document.getElementById('cumulativeBirthComparison').innerText = `與去年同期比較: ${sumCurrent.BIRTH - sumPrevious.BIRTH}`;
+
+    document.getElementById('cumulativeDeathData').innerText = sumCurrent.DEATH;
+    document.getElementById('cumulativeDeathComparison').innerText = `與去年同期比較: ${sumCurrent.DEATH - sumPrevious.DEATH}`;
+
+    document.getElementById('cumulativePopulationData').innerText = currentData[currentData.length - 1]?.POPULATION || 0;
+    document.getElementById('cumulativePopulationComparison').innerText = `與去年年底比較: ${(currentData[currentData.length - 1]?.POPULATION || 0) - (previousYearData[previousYearData.length - 1]?.POPULATION || 0)}`;
+
+    document.getElementById('cumulativeNaturalIncreaseData').innerText = sumCurrent['NATURE INCREASE'];
+    document.getElementById('cumulativeNaturalIncreaseComparison').innerText = `與去年同期比較: ${sumCurrent['NATURE INCREASE'] - sumPrevious['NATURE INCREASE']}`;
+
+    document.getElementById('cumulativeSocialIncreaseData').innerText = sumCurrent['SOCIAL INCREASE'];
+    document.getElementById('cumulativeSocialIncreaseComparison').innerText = `與去年同期比較: ${sumCurrent['SOCIAL INCREASE'] - sumPrevious['SOCIAL INCREASE']}`;
+}
+
+function calculateSum(data) {
+    return data.reduce((sum, item) => ({
+        BIRTH: sum.BIRTH + (item.BIRTH || 0),
+        DEATH: sum.DEATH + (item.DEATH || 0),
+        'NATURE INCREASE': sum['NATURE INCREASE'] + (item['NATURE INCREASE'] || 0),
+        'SOCIAL INCREASE': sum['SOCIAL INCREASE'] + (item['SOCIAL INCREASE'] || 0),
+    }), { BIRTH: 0, DEATH: 0, 'NATURE INCREASE': 0, 'SOCIAL INCREASE': 0 });
 }
 
 // 初始化滑動條
