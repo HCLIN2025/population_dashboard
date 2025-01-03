@@ -118,25 +118,40 @@ function displayLatestData() {
     const previousYear = rawData.find(item => item.YEAR === latest.YEAR - 1 && item.MONTH === latest.MONTH) || {};
 
     document.getElementById('birthData').innerText = latest.BIRTH;
-    document.getElementById('birthComparison').innerText = `上月比較: ${(latest.BIRTH - (previousMonth.BIRTH || 0))}，同比去年: ${(latest.BIRTH - (previousYear.BIRTH || 0))}`;
+    document.getElementById('birthComparison').innerHTML = `
+        與上月比較：${(latest.BIRTH - (previousMonth.BIRTH || 0))}<br>
+        與去年同月比較：${(latest.BIRTH - (previousYear.BIRTH || 0))}
+    `;
 
     document.getElementById('deathData').innerText = latest.DEATH;
-    document.getElementById('deathComparison').innerText = `上月比較: ${(latest.DEATH - (previousMonth.DEATH || 0))}，同比去年: ${(latest.DEATH - (previousYear.DEATH || 0))}`;
+    document.getElementById('deathComparison').innerHTML = `
+        與上月比較：${(latest.DEATH - (previousMonth.DEATH || 0))}<br>
+        與去年同月比較：${(latest.DEATH - (previousYear.DEATH || 0))}
+    `;
 
     document.getElementById('populationData').innerText = latest.POPULATION;
-    document.getElementById('populationComparison').innerText = `上月比較: ${(latest.POPULATION - (previousMonth.POPULATION || 0))}，同比去年: ${(latest.POPULATION - (previousYear.POPULATION || 0))}`;
+    document.getElementById('populationComparison').innerHTML = `
+        與上月比較：${(latest.POPULATION - (previousMonth.POPULATION || 0))}<br>
+        與去年同月比較：${(latest.POPULATION - (previousYear.POPULATION || 0))}
+    `;
 
     document.getElementById('naturalIncreaseData').innerText = latest['NATURE INCREASE'];
-    document.getElementById('naturalIncreaseComparison').innerText = `上月比較: ${(latest['NATURE INCREASE'] - (previousMonth['NATURE INCREASE'] || 0))}，同比去年: ${(latest['NATURE INCREASE'] - (previousYear['NATURE INCREASE'] || 0))}`;
+    document.getElementById('naturalIncreaseComparison').innerHTML = `
+        與上月比較：${(latest['NATURE INCREASE'] - (previousMonth['NATURE INCREASE'] || 0))}<br>
+        與去年同月比較：${(latest['NATURE INCREASE'] - (previousYear['NATURE INCREASE'] || 0))}
+    `;
 
     document.getElementById('socialIncreaseData').innerText = latest['SOCIAL INCREASE'];
-    document.getElementById('socialIncreaseComparison').innerText = `上月比較: ${(latest['SOCIAL INCREASE'] - (previousMonth['SOCIAL INCREASE'] || 0))}，同比去年: ${(latest['SOCIAL INCREASE'] - (previousYear['SOCIAL INCREASE'] || 0))}`;
+    document.getElementById('socialIncreaseComparison').innerHTML = `
+        與上月比較：${(latest['SOCIAL INCREASE'] - (previousMonth['SOCIAL INCREASE'] || 0))}<br>
+        與去年同月比較：${(latest['SOCIAL INCREASE'] - (previousYear['SOCIAL INCREASE'] || 0))}
+    `;
 
-    document.getElementById('birthTitle').innerText = `${latest.YEAR}年${latest.MONTH}月最新出生人數`;
-    document.getElementById('deathTitle').innerText = `${latest.YEAR}年${latest.MONTH}月最新死亡人數`;
-    document.getElementById('populationTitle').innerText = `${latest.YEAR}年${latest.MONTH}月最新總人口數`;
-    document.getElementById('naturalIncreaseTitle').innerText = `${latest.YEAR}年${latest.MONTH}月最新自然增加`;
-    document.getElementById('socialIncreaseTitle').innerText = `${latest.YEAR}年${latest.MONTH}月最新社會增加`;
+    document.getElementById('birthTitle').innerText = `${latest.YEAR}年${latest.MONTH}月出生人數`;
+    document.getElementById('deathTitle').innerText = `${latest.YEAR}年${latest.MONTH}月死亡人數`;
+    document.getElementById('populationTitle').innerText = `${latest.YEAR}年${latest.MONTH}月總人口數`;
+    document.getElementById('naturalIncreaseTitle').innerText = `${latest.YEAR}年${latest.MONTH}月自然增加`;
+    document.getElementById('socialIncreaseTitle').innerText = `${latest.YEAR}年${latest.MONTH}月社會增加`;
 }
 
 // 初始化滑動條
