@@ -4,66 +4,74 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>人口互動式儀表板</title>
+    <!-- 引入 Plotly 圖表庫 -->
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <!-- 引入 jQuery 和 jQuery UI 库 -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+    <!-- 引入 jQuery UI 樣式 -->
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <style>
+        /* 頁面基本樣式 */
         body {
             font-family: Arial, sans-serif;
             margin: 20px;
         }
+
+        /* 設置圖表區域 */
         .chart {
             margin-top: 20px;
             width: 100%;
             height: 400px;
         }
+
+        /* 設置數據區域文字 */
         .latest-data {
             font-size: 16px;
             margin-top: 10px;
         }
-        
-        /* 設置篩選器容器寬度為頁面寬度的1/3，並將篩選器置左 */
+
+        /* 設定篩選器容器寬度為頁面寬度的1/3，並將篩選器置左 */
         .slider-container {
-            margin-bottom: 30px; /* 根據需要增加間距，數值可以調整 */
-            width: 33%;  /* 保持篩選器寬度為頁面寬度的1/3 */
-            margin-left: 0; /* 確保篩選器置左 */
-            padding-bottom: 15px; /* 加大篩選器與下方日期顯示的間距 */
+            margin-bottom: 30px;
+            width: 33%;
+            margin-left: 0;
+            padding-bottom: 15px;
         }
 
-        /* 設定篩選器的整體背景顏色 */
+        /* 設置篩選器滑動條背景顏色 */
         #timeRangeSlider {
-            background: #ffffff;  /* 設定滑動條背景顏色為番茄紅 */
+            background: #ffffff;
         }
 
-        /* 設置範圍（已選擇區域）的顏色 */
+        /* 設置已選區域的顏色 */
         .ui-slider .ui-slider-range {
-            background: #ff8760 !important; /* 設定範圍顏色為鮮豔的橙色 */
-        }   
+            background: #ff8760 !important;
+        }
 
-        /* 設置滑動條的拖拉點顏色 */
+        /* 設置滑動條的拖動點顏色 */
         .ui-slider .ui-slider-handle {
-            background: #000000 !important; /* 設定拖動點顏色為金色 */
-            border-color: #ffffff !important; /* 設定拖動點邊框顏色為金色 */
+            background: #000000 !important;
+            border-color: #ffffff !important;
         }
 
-        /* 調整篩選資料按鈕位置 */
+        /* 設置篩選資料按鈕間距 */
         #filterButton {
-            margin-top: 15px; /* 增加按鈕與篩選器之間的距離 */
+            margin-top: 15px;
         }
 
-        /* 如果有需要，調整篩選器的內部對齊 */
+        /* 設置篩選器滑動條最大寬度 */
         .slider-container .ui-slider {
-            width: 100%; /* 滑動條最大寬度 */
-            margin-left: 0; /* 保證篩選器置左 */
+            width: 100%;
+            margin-left: 0;
         }
-        
+
+        /* 數據區域容器 */
         .data-container {
             display: flex;
             justify-content: space-between;
             align-items: stretch;
         }
-
 
         /* 區塊區分底色 */
         .section {
@@ -72,22 +80,20 @@
             border-radius: 8px;
         }
 
-        /* 第一部分底色 */
+        /* 各區塊背景顏色 */
         .section1 {
             background-color: #e0f7fa; /* 淺藍色 */
         }
 
-        /* 第二部分底色 */
         .section2 {
             background-color: #fff3e0; /* 淺橙色 */
         }
 
-        /* 第三部分底色 */
         .section3 {
             background-color: #e8f5e9; /* 淺綠色 */
         }
 
-
+        /* 數據卡片樣式 */
         .data-box {
             padding: 20px;
             margin: 10px;
@@ -102,16 +108,21 @@
         .population { background-color: #264653; }
         .natural-increase { background-color: #f4a261; }
         .social-increase { background-color: #e76f51; }
+
+        /* 設置數據文字顯示樣式 */
         .data-value {
             font-weight: bold;
             font-size: 28px;
         }
 
+        /* 設置累計數據顯示區域 */
         .cumulative-container {
             display: flex;
             justify-content: space-between;
             align-items: stretch;
         }
+
+        /* 設置各數據卡片寬度 */
         .cumulative-container .data-box {
             flex-basis: 30%;
         }
@@ -130,25 +141,21 @@
             <p class="data-value" id="birthData">0</p>
             <p id="birthComparison"></p>
         </div>
-
         <div class="data-box death">
             <h2 id="deathTitle">最新死亡人數</h2>
             <p class="data-value" id="deathData">0</p>
             <p id="deathComparison"></p>
         </div>
-
         <div class="data-box population">
             <h2 id="populationTitle">最新總人口數</h2>
             <p class="data-value" id="populationData">0</p>
             <p id="populationComparison"></p>
         </div>
-
         <div class="data-box natural-increase">
             <h2 id="naturalIncreaseTitle">最新自然增加</h2>
             <p class="data-value" id="naturalIncreaseData">0</p>
             <p id="naturalIncreaseComparison"></p>
         </div>
-
         <div class="data-box social-increase">
             <h2 id="socialIncreaseTitle">最新社會增加</h2>
             <p class="data-value" id="socialIncreaseData">0</p>
@@ -166,25 +173,21 @@
             <p class="data-value" id="cumulativeBirthData">0</p>
             <p id="cumulativeBirthComparison">與去年同期比較: 0</p>
         </div>
-
         <div class="data-box death">
             <h2 id="cumulativeDeathTitle">2024年死亡人數(累計至11月)</h2>
             <p class="data-value" id="cumulativeDeathData">0</p>
             <p id="cumulativeDeathComparison">與去年同期比較: 0</p>
         </div>
-
         <div class="data-box population">
             <h2 id="cumulativePopulationTitle">2024年總人口數(至11月)</h2>
             <p class="data-value" id="cumulativePopulationData">0</p>
             <p id="cumulativePopulationComparison">與去年年底比較: 0</p>
         </div>
-
         <div class="data-box natural-increase">
             <h2 id="cumulativeNaturalIncreaseTitle">2024年自然增加(累計至11月)</h2>
             <p class="data-value" id="cumulativeNaturalIncreaseData">0</p>
             <p id="cumulativeNaturalIncreaseComparison">與去年同期比較: 0</p>
         </div>
-
         <div class="data-box social-increase">
             <h2 id="cumulativeSocialIncreaseTitle">2024年社會增加(累計至11月)</h2>
             <p class="data-value" id="cumulativeSocialIncreaseData">0</p>
@@ -202,6 +205,7 @@
         <span id="selectedTimeRange">2021-01 至 2024-11</span>
         <button id="filterButton">篩選資料</button>
     </div>
+</div>
 
 <!-- 圖表區域 -->    
 <div id="birthDeathChart" class="chart"></div>
@@ -258,92 +262,61 @@ function displayLatestData() {
         與上月比較：${(latest['SOCIAL INCREASE'] - (previousMonth['SOCIAL INCREASE'] || 0))}<br>
         與去年同月比較：${(latest['SOCIAL INCREASE'] - (previousYear['SOCIAL INCREASE'] || 0))}
     `;
-
-    document.getElementById('birthTitle').innerText = `${latest.YEAR}年${latest.MONTH}月出生人數`;
-    document.getElementById('deathTitle').innerText = `${latest.YEAR}年${latest.MONTH}月死亡人數`;
-    document.getElementById('populationTitle').innerText = `${latest.YEAR}年${latest.MONTH}月總人口數`;
-    document.getElementById('naturalIncreaseTitle').innerText = `${latest.YEAR}年${latest.MONTH}月自然增加`;
-    document.getElementById('socialIncreaseTitle').innerText = `${latest.YEAR}年${latest.MONTH}月社會增加`;
 }
 
-// 初始化滑動條
+// 初始化時間篩選器
 function initializeSlider() {
-    const timeLabels = rawData.map(item => `${item.YEAR}-${String(item.MONTH).padStart(2, '0')}`);
-
-    $("#timeRangeSlider").slider({
+    const slider = $("#timeRangeSlider");
+    slider.slider({
         range: true,
         min: 0,
-        max: timeLabels.length - 1,
-        values: [0, timeLabels.length - 1],
+        max: rawData.length - 1,
+        values: [0, rawData.length - 1],
         slide: function(event, ui) {
-            const start = timeLabels[ui.values[0]];
-            const end = timeLabels[ui.values[1]];
-            $("#selectedTimeRange").text(`${start} 至 ${end}`);
+            const startDate = rawData[ui.values[0]];
+            const endDate = rawData[ui.values[1]];
+            document.getElementById('selectedTimeRange').innerText = `${startDate.YEAR}-${startDate.MONTH} 至 ${endDate.YEAR}-${endDate.MONTH}`;
         }
     });
-
-    const start = timeLabels[0];
-    const end = timeLabels[timeLabels.length - 1];
-    $("#selectedTimeRange").text(`${start} 至 ${end}`);
-}
-// 篩選資料並更新儀表板
-function filterData() {
-    const timeLabels = rawData.map(item => `${item.YEAR}-${String(item.MONTH).padStart(2, '0')}`);
-    const [startIdx, endIdx] = $("#timeRangeSlider").slider("values");
-    const filteredData = rawData.slice(startIdx, endIdx + 1);
-    createDashboard(filteredData);
 }
 
-document.getElementById('filterButton').addEventListener('click', filterData);
-
-// 建立儀表板
+// 創建儀表板圖表
 function createDashboard(data) {
-    const months = data.map(item => `${item.YEAR}-${item.MONTH}`);
-    const birthData = data.map(item => item.BIRTH);
-    const deathData = data.map(item => item.DEATH);
+    const birthDeathData = data.map(item => ({
+        x: item.YEAR,
+        y: item.BIRTH,
+        name: '出生人數',
+        type: 'scatter',
+    }));
 
-    // 出生與死亡趨勢圖
-    Plotly.newPlot('birthDeathChart', [
-        { x: months, y: birthData, mode: 'lines+markers', name: '出生人數' },
-        { x: months, y: deathData, mode: 'lines+markers', name: '死亡人數' }
-    ], {
-        title: '每月出生與死亡人數',
-        xaxis: { title: '月份' },
-        yaxis: { title: '人數' }
-    });
-// 自然與社會增加對比圖
-const naturalIncrease = data.map(item => item['NATURE INCREASE']);
-    const socialIncrease = data.map(item => item['SOCIAL INCREASE']);
-    Plotly.newPlot('increaseComparisonChart', [
-        { x: months, y: naturalIncrease, mode: 'lines+markers', name: '自然增加' },
-        { x: months, y: socialIncrease, mode: 'lines+markers', name: '社會增加' }
-    ], {
-        title: '自然增加與社會增加對比',
-        xaxis: { title: '月份' },
-        yaxis: { title: '人數' }
-    });
+    const increaseComparisonData = data.map(item => ({
+        x: item.YEAR,
+        y: item['NATURE INCREASE'],
+        name: '自然增加',
+        type: 'scatter',
+    }));
 
-    // 總人口變化圖
-    const population = data.map(item => item.POPULATION);
-    Plotly.newPlot('populationChangeChart', [
-        { x: months, y: population, mode: 'lines+markers', name: '總人口數' }
-    ], {
-        title: '總人口變化趨勢',
-        xaxis: { title: '月份' },
-        yaxis: { title: '人數' }
-    });
+    const populationChangeData = data.map(item => ({
+        x: item.YEAR,
+        y: item.POPULATION,
+        name: '總人口數',
+        type: 'scatter',
+    }));
 
-    // 婚姻與人口關係圖
-    const marriages = data.map(item => item.MARRIAGES);
-    Plotly.newPlot('marriagePopulationRelationChart', [
-        { x: marriages, y: population, mode: 'markers', name: '婚姻與總人口' }
-    ], {
-        title: '婚姻與人口數關係',
-        xaxis: { title: '婚姻數' },
-        yaxis: { title: '總人口數' }
-    });
+    const marriagePopulationData = data.map(item => ({
+        x: item.YEAR,
+        y: item['MARRIAGE'],
+        name: '結婚人口數',
+        type: 'scatter',
+    }));
+
+    Plotly.newPlot('birthDeathChart', birthDeathData);
+    Plotly.newPlot('increaseComparisonChart', increaseComparisonData);
+    Plotly.newPlot('populationChangeChart', populationChangeData);
+    Plotly.newPlot('marriagePopulationRelationChart', marriagePopulationData);
 }
 </script>
+
 </body>
 </html>
 
