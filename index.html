@@ -56,36 +56,35 @@
 
 <div class="data-container">
     <div class="data-box birth">
-        <h2 id="birthTitle">○年○月出生人數</h2>
+        <h2 id="birthTitle">最新出生人數</h2>
         <p class="data-value" id="birthData">0</p>
-        <p>上月變動：<span id="birthChange">0</span></p>
+        <p id="birthComparison"></p>
     </div>
 
     <div class="data-box death">
-        <h2 id="deathTitle">○年○月死亡人數</h2>
+        <h2 id="deathTitle">最新死亡人數</h2>
         <p class="data-value" id="deathData">0</p>
-        <p>上月變動：<span id="deathChange">0</span></p>
+        <p id="deathComparison"></p>
     </div>
 
     <div class="data-box population">
-        <h2 id="populationTitle">○年○月總人口數</h2>
+        <h2 id="populationTitle">最新總人口數</h2>
         <p class="data-value" id="populationData">0</p>
-        <p>上月變動：<span id="populationChange">0</span></p>
+        <p id="populationComparison"></p>
     </div>
 
     <div class="data-box natural-increase">
-        <h2 id="naturalIncreaseTitle">○年○月自然增加</h2>
+        <h2 id="naturalIncreaseTitle">最新自然增加</h2>
         <p class="data-value" id="naturalIncreaseData">0</p>
-        <p>上月變動：<span id="naturalIncreaseChange">0</span></p>
+        <p id="naturalIncreaseComparison"></p>
     </div>
 
     <div class="data-box social-increase">
-        <h2 id="socialIncreaseTitle">○年○月社會增加</h2>
+        <h2 id="socialIncreaseTitle">最新社會增加</h2>
         <p class="data-value" id="socialIncreaseData">0</p>
-        <p>上月變動：<span id="socialIncreaseChange">0</span></p>
+        <p id="socialIncreaseComparison"></p>
     </div>
 </div>
-
 
 <div class="slider-container">
     <label for="timeRangeSlider">選擇時間範圍:</label>
@@ -115,11 +114,29 @@ fetch('https://raw.githubusercontent.com/HCLIN2025/population_dashboard/main/dat
 // 顯示最新數據
 function displayLatestData() {
     const latest = rawData[rawData.length - 1];
+    const previousMonth = rawData[rawData.length - 2] || {};
+    const previousYear = rawData.find(item => item.YEAR === latest.YEAR - 1 && item.MONTH === latest.MONTH) || {};
+
     document.getElementById('birthData').innerText = latest.BIRTH;
+    document.getElementById('birthComparison').innerText = `上月比較: ${(latest.BIRTH - (previousMonth.BIRTH || 0))}，同比去年: ${(latest.BIRTH - (previousYear.BIRTH || 0))}`;
+
     document.getElementById('deathData').innerText = latest.DEATH;
+    document.getElementById('deathComparison').innerText = `上月比較: ${(latest.DEATH - (previousMonth.DEATH || 0))}，同比去年: ${(latest.DEATH - (previousYear.DEATH || 0))}`;
+
     document.getElementById('populationData').innerText = latest.POPULATION;
+    document.getElementById('populationComparison').innerText = `上月比較: ${(latest.POPULATION - (previousMonth.POPULATION || 0))}，同比去年: ${(latest.POPULATION - (previousYear.POPULATION || 0))}`;
+
     document.getElementById('naturalIncreaseData').innerText = latest['NATURE INCREASE'];
+    document.getElementById('naturalIncreaseComparison').innerText = `上月比較: ${(latest['NATURE INCREASE'] - (previousMonth['NATURE INCREASE'] || 0))}，同比去年: ${(latest['NATURE INCREASE'] - (previousYear['NATURE INCREASE'] || 0))}`;
+
     document.getElementById('socialIncreaseData').innerText = latest['SOCIAL INCREASE'];
+    document.getElementById('socialIncreaseComparison').innerText = `上月比較: ${(latest['SOCIAL INCREASE'] - (previousMonth['SOCIAL INCREASE'] || 0))}，同比去年: ${(latest['SOCIAL INCREASE'] - (previousYear['SOCIAL INCREASE'] || 0))}`;
+
+    document.getElementById('birthTitle').innerText = `${latest.YEAR}年${latest.MONTH}月最新出生人數`;
+    document.getElementById('deathTitle').innerText = `${latest.YEAR}年${latest.MONTH}月最新死亡人數`;
+    document.getElementById('populationTitle').innerText = `${latest.YEAR}年${latest.MONTH}月最新總人口數`;
+    document.getElementById('naturalIncreaseTitle').innerText = `${latest.YEAR}年${latest.MONTH}月最新自然增加`;
+    document.getElementById('socialIncreaseTitle').innerText = `${latest.YEAR}年${latest.MONTH}月最新社會增加`;
 }
 
 // 初始化滑動條
@@ -142,7 +159,6 @@ function initializeSlider() {
     const end = timeLabels[timeLabels.length - 1];
     $("#selectedTimeRange").text(`${start} 至 ${end}`);
 }
-
 // 篩選資料並更新儀表板
 function filterData() {
     const timeLabels = rawData.map(item => `${item.YEAR}-${String(item.MONTH).padStart(2, '0')}`);
