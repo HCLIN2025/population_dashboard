@@ -3,215 +3,80 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>人口互動式儀表板</title>
-    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
-    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <title>人口數據儀表板</title>
     <style>
         body {
             font-family: Arial, sans-serif;
             margin: 20px;
         }
-        .chart {
-            margin-top: 20px;
-            width: 100%;
-            height: 400px;
-        }
-        .latest-data {
-            font-size: 16px;
-            margin-top: 10px;
-        }
-        .slider-container {
+        .data-box {
+            padding: 20px;
             margin-bottom: 20px;
+            border-radius: 5px;
+            color: white;
         }
+        .birth { background-color: #4CAF50; } /* 綠色 */
+        .death { background-color: #F44336; } /* 紅色 */
+        .population { background-color: #2196F3; } /* 藍色 */
+        .natural-increase { background-color: #FF9800; } /* 橙色 */
+        .social-increase { background-color: #9C27B0; } /* 紫色 */
     </style>
 </head>
 <body>
 
-<h1>人口互動式儀表板</h1>
+<h1>最新人口數據</h1>
 
-<div class="slider-container">
-    <label for="yearSlider">選擇年份:</label>
-    <div id="yearSlider"></div>
-    <span id="selectedYear">2021</span>
-    
-    <label for="monthSlider">選擇月份:</label>
-    <div id="monthSlider"></div>
-    <span id="selectedMonth">1</span>
-    
-    <button id="filterButton">篩選資料</button>
+<div class="data-box birth">
+    <h2>出生人數</h2>
+    <p id="birthData">最新出生人數：0 | 上月變動：0</p>
 </div>
 
-<div id="birthDeathChart" class="chart"></div>
-<div class="latest-data" id="latestBirthDeathData"></div>
+<div class="data-box death">
+    <h2>死亡人數</h2>
+    <p id="deathData">最新死亡人數：0 | 上月變動：0</p>
+</div>
 
-<div id="increaseComparisonChart" class="chart"></div>
-<div class="latest-data" id="latestIncreaseData"></div>
+<div class="data-box population">
+    <h2>總人口數</h2>
+    <p id="populationData">最新總人口數：0 | 上月變動：0</p>
+</div>
 
-<div id="populationChangeChart" class="chart"></div>
-<div class="latest-data" id="latestPopulationData"></div>
+<div class="data-box natural-increase">
+    <h2>自然增加</h2>
+    <p id="naturalIncreaseData">最新自然增加：0 | 上月變動：0</p>
+</div>
 
-<div id="marriagePopulationRelationChart" class="chart"></div>
-<div class="latest-data" id="latestMarriageData"></div>
+<div class="data-box social-increase">
+    <h2>社會增加</h2>
+    <p id="socialIncreaseData">最新社會增加：0 | 上月變動：0</p>
+</div>
 
 <script>
-// 使用Fetch API加載JSON數據
-fetch('https://raw.githubusercontent.com/HCLIN2025/population_dashboard/main/data.json') // 使用原始鏈接
-    .then(response => {
-        if (!response.ok) {
-            throw new Error('網絡響應出錯');
-        }
-        return response.json();
-    })
-    .then(data => {
-        window.data = data; // 將數據存儲在全局變量中
-        createDashboard(data); // 調用創建儀表板的函數
-    })
-    .catch(error => {
-        console.error('獲取數據時出現問題:', error);
-    });
+// 假設從API獲取的數據
+const latestData = {
+    birth: { current: 5000, lastMonth: 4800 },
+    death: { current: 3000, lastMonth: 2900 },
+    population: { current: 200000, lastMonth: 199500 },
+    naturalIncrease: { current: 2000, lastMonth: 1900 },
+    socialIncrease: { current: 1500, lastMonth: 1400 }
+};
 
-// 創建儀表板的函數
-function createDashboard(data) {
-    const birthData = [];
-    const deathData = [];
-    const natureIncreaseData = [];
-    const socialIncreaseData = [];
-    const marriageData = [];
-    const totalPopulationData = [];
-    
-    const months = data.map(item => `${item.YEAR}-${item.MONTH}`);
-
-    data.forEach(item => {
-        birthData.push(item.BIRTH);
-        deathData.push(item.DEATH);
-        natureIncreaseData.push(item['NATURE INCREASE']);
-        socialIncreaseData.push(item['SOCIAL INCREASE']);
-        marriageData.push(item.MARRIAGE);
-        totalPopulationData.push(item.POPULATION);
-    });
-
-    // 出生與死亡趨勢圖
-    const birthDeathTrace1 = {
-        x: months,
-        y: birthData,
-        mode: 'lines+markers',
-        name: '出生人數'
-    };
-
-    const birthDeathTrace2 = {
-        x: months,
-        y: deathData,
-        mode: 'lines+markers',
-        name: '死亡人數'
-    };
-
-    const birthDeathLayout = {
-        title: '每月出生與死亡人數',
-        xaxis: { title: '月份' },
-        yaxis: { title: '人數' }
-    };
-
-    Plotly.newPlot('birthDeathChart', [birthDeathTrace1, birthDeathTrace2], birthDeathLayout);
-
-    // 顯示最新的出生和死亡數據
-    document.getElementById('latestBirthDeathData').innerText =
-        `最新出生人數：${birthData[birthData.length - 1]} | 最新死亡人數：${deathData[deathData.length - 1]}`;
-
-   // 自然增加與社會增加對比圖
-   const increaseTrace1 = {
-       x: months,
-       y: natureIncreaseData,
-       type: 'bar',
-       name: '自然增加'
-   };
-
-   const increaseTrace2 = {
-       x: months,
-       y: socialIncreaseData,
-       type: 'bar',
-       name: '社會增加'
-   };
-
-   const increaseLayout = {
-       title: '自然增加與社會增加對比',
-       barmode: 'group',
-       xaxis: { title: '月份' },
-       yaxis: { title: '人數' }
-   };
-
-   Plotly.newPlot('increaseComparisonChart', [increaseTrace1, increaseTrace2], increaseLayout);
-
-   // 總人口變化動態圖
-   const populationChangeTrace = {
-       x: months,
-       y: totalPopulationData,
-       mode: 'lines+markers',
-       name: '總人口'
-   };
-
-   const populationChangeLayout = {
-       title: '每月總人口變化',
-       xaxis: { title: '月份' },
-       yaxis: { title: '總人口' }
-   };
-
-   Plotly.newPlot('populationChangeChart', [populationChangeTrace], populationChangeLayout);
-
-   // 婚姻數量與總人口關係圖
-   const marriagePopulationTrace = {
-       x: marriageData,
-       y: totalPopulationData,
-       mode: 'markers',
-       type: 'scatter',
-       name: '婚姻數量 vs 總人口'
-   };
-
-   const marriagePopulationLayout = {
-       title: '婚姻數量與總人口關係',
-       xaxis: { title: '婚姻數量' },
-       yaxis: { title: '總人口' }
-   };
-
-   Plotly.newPlot('marriagePopulationRelationChart', [marriagePopulationTrace], marriagePopulationLayout);
-}
-
-// 初始化年份和月份滑動條
-$(function() {
-    $("#yearSlider").slider({
-        min: 2021,
-        max: 2024,
-        value: 2021,
-        slide(event, ui) {
-            $("#selectedYear").text(ui.value);
-        }
-    });
-
-    $("#monthSlider").slider({
-        min: 1,
-        max: 12,
-        value: 1,
-        slide(event, ui) {
-            $("#selectedMonth").text(ui.value);
-        }
-    });
-});
-
-// 篩選資料函數
-document.getElementById('filterButton').addEventListener('click', () => {
-    const selectedYear = parseInt($("#yearSlider").slider("value"));
-    const selectedMonth = parseInt($("#monthSlider").slider("value"));
-    
-    // 篩選資料邏輯
-    const filteredData = window.data.filter(item => item.YEAR === selectedYear && item.MONTH === selectedMonth);
-
-    createDashboard(filteredData); // 使用篩選後的資料重新創建儀表板
-});
+// 更新網頁中的數據
+document.getElementById('birthData').innerText =
+    `最新出生人數：${latestData.birth.current} | 上月變動：${latestData.birth.current - latestData.birth.lastMonth}`;
+document.getElementById('deathData').innerText =
+    `最新死亡人數：${latestData.death.current} | 上月變動：${latestData.death.current - latestData.death.lastMonth}`;
+document.getElementById('populationData').innerText =
+    `最新總人口數：${latestData.population.current} | 上月變動：${latestData.population.current - latestData.population.lastMonth}`;
+document.getElementById('naturalIncreaseData').innerText =
+    `最新自然增加：${latestData.naturalIncrease.current} | 上月變動：${latestData.naturalIncrease.current - latestData.naturalIncrease.lastMonth}`;
+document.getElementById('socialIncreaseData').innerText =
+    `最新社會增加：${latestData.socialIncrease.current} | 上月變動：${latestData.socialIncrease.current - latestData.socialIncrease.lastMonth}`;
 </script>
 
 </body>
 </html>
+
 
 
 
