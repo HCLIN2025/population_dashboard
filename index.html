@@ -48,6 +48,14 @@
         .slider-container {
             margin-bottom: 20px;
         }
+        .cumulative-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: stretch;
+        }
+        .cumulative-container .data-box {
+            flex-basis: 30%;
+        }
     </style>
 </head>
 <body>
@@ -88,41 +96,40 @@
 
 <div class="cumulative-container">
     <div class="data-box birth">
-        <h2 id="cumulativeBirthTitle">2024年出生人數(累計至12月)</h2>
+        <h2 id="cumulativeBirthTitle">2024年出生人數(累計至11月)</h2>
         <p class="data-value" id="cumulativeBirthData">0</p>
         <p id="cumulativeBirthComparison">與去年同期比較: 0</p>
     </div>
 
     <div class="data-box death">
-        <h2 id="cumulativeDeathTitle">2024年死亡人數(累計至12月)</h2>
+        <h2 id="cumulativeDeathTitle">2024年死亡人數(累計至11月)</h2>
         <p class="data-value" id="cumulativeDeathData">0</p>
         <p id="cumulativeDeathComparison">與去年同期比較: 0</p>
     </div>
 
     <div class="data-box population">
-        <h2 id="cumulativePopulationTitle">2024年總人口數(至12月)</h2>
+        <h2 id="cumulativePopulationTitle">2024年總人口數(至11月)</h2>
         <p class="data-value" id="cumulativePopulationData">0</p>
         <p id="cumulativePopulationComparison">與去年年底比較: 0</p>
     </div>
 
     <div class="data-box natural-increase">
-        <h2 id="cumulativeNaturalIncreaseTitle">2024年自然增加(累計至12月)</h2>
+        <h2 id="cumulativeNaturalIncreaseTitle">2024年自然增加(累計至11月)</h2>
         <p class="data-value" id="cumulativeNaturalIncreaseData">0</p>
         <p id="cumulativeNaturalIncreaseComparison">與去年同期比較: 0</p>
     </div>
 
     <div class="data-box social-increase">
-        <h2 id="cumulativeSocialIncreaseTitle">2024年社會增加(累計至12月)</h2>
+        <h2 id="cumulativeSocialIncreaseTitle">2024年社會增加(累計至11月)</h2>
         <p class="data-value" id="cumulativeSocialIncreaseData">0</p>
         <p id="cumulativeSocialIncreaseComparison">與去年同期比較: 0</p>
     </div>
 </div>
 
-
 <div class="slider-container">
     <label for="timeRangeSlider">選擇時間範圍:</label>
     <div id="timeRangeSlider"></div>
-    <span id="selectedTimeRange">2021-01 至 2024-12</span>
+    <span id="selectedTimeRange">2021-01 至 2024-11</span>
     <button id="filterButton">篩選資料</button>
 </div>
 
@@ -132,6 +139,7 @@
 <div id="marriagePopulationRelationChart" class="chart"></div>
 
 <script>
+// 假設 rawData 是從 API 獲取的數據
 let rawData = [];
 
 // 獲取數據並初始化
@@ -187,7 +195,6 @@ function displayLatestData() {
     document.getElementById('naturalIncreaseTitle').innerText = `${latest.YEAR}年${latest.MONTH}月最新自然增加`;
     document.getElementById('socialIncreaseTitle').innerText = `${latest.YEAR}年${latest.MONTH}月最新社會增加`;
 }
-
 
 // 顯示最新年度累計數據
 function displayCumulativeData() {
