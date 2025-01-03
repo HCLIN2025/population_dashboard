@@ -37,11 +37,11 @@
             color: white;
             flex-basis: 30%; /* 每個方框佔據30%寬度 */
         }
-        .birth { background-color: #4CAF50; } /* 綠色 */
-        .death { background-color: #F44336; } /* 紅色 */
-        .population { background-color: #2196F3; } /* 藍色 */
-        .natural-increase { background-color: #FF9800; } /* 橙色 */
-        .social-increase { background-color: #9C27B0; } /* 紫色 */
+        .birth { background-color: #2a9d8f; } /* 綠色 */
+        .death { background-color: #e9c46a; } /* 紅色 */
+        .population { background-color: #264653; } /* 藍色 */
+        .natural-increase { background-color: #f4a261; } /* 橙色 */
+        .social-increase { background-color: #e76f51; } /* 紫色 */
         .data-value {
             font-weight: bold; 
             font-size: 24px; /* 數據字體大於標題 */
@@ -50,20 +50,7 @@
 </head>
 <body>
 
-<h1>人口互動式儀表板</h1>
-
-<div class="slider-container">
-    <label for="yearSlider">選擇年份:</label>
-    <div id="yearSlider"></div>
-    <span id="selectedYear">2021</span>
-
-    <label for="monthSlider">選擇月份:</label>
-    <div id="monthSlider"></div>
-    <span id="selectedMonth">1</span>
-
-    <button id="filterButton">篩選資料</button>
-</div>
-
+<h1>最新人口數據</h1>
 <div class="data-container">
     <div class="data-box birth">
         <h2>出生人數</h2>
@@ -159,6 +146,19 @@ function createDashboard(data) {
    document.getElementById('naturalIncreaseChange').innerText = natureIncreaseData[natureIncreaseData.length - 1] - natureIncreaseData[natureIncreaseData.length - 2];
    document.getElementById('socialIncreaseChange').innerText = socialIncreaseData[socialIncreaseData.length - 1] - socialIncreaseData[socialIncreaseData.length - 2];
 
+
+   <div class="slider-container">
+    <label for="yearSlider">選擇年份:</label>
+    <div id="yearSlider"></div>
+    <span id="selectedYear">2021</span>
+
+    <label for="monthSlider">選擇月份:</label>
+    <div id="monthSlider"></div>
+    <span id="selectedMonth">1</span>
+
+    <button id="filterButton">篩選資料</button>
+    
+</div>
    // 出生與死亡趨勢圖
    const birthDeathTrace1 = {
        x: months,
