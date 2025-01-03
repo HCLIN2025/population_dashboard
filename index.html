@@ -266,61 +266,84 @@ function displayLatestData() {
 
 // 初始化時間篩選器
 function initializeSlider() {
-    const slider = $("#timeRangeSlider");
-    slider.slider({
+    const timeLabels = rawData.map(item => ${item.YEAR}-${String(item.MONTH).padStart(2, '0')});
+
+    $("#timeRangeSlider").slider({
         range: true,
         min: 0,
-        max: rawData.length - 1,
-        values: [0, rawData.length - 1],
+        max: timeLabels.length - 1,
+        values: [0, timeLabels.length - 1],
         slide: function(event, ui) {
-            const startDate = rawData[ui.values[0]];
-            const endDate = rawData[ui.values[1]];
-            document.getElementById('selectedTimeRange').innerText = `${startDate.YEAR}-${startDate.MONTH} 至 ${endDate.YEAR}-${endDate.MONTH}`;
+            const start = timeLabels[ui.values[0]];
+            const end = timeLabels[ui.values[1]];
+            $("#selectedTimeRange").text(${start} 至 ${end});
         }
     });
+
+    const start = timeLabels[0];
+    const end = timeLabels[timeLabels.length - 1];
+    $("#selectedTimeRange").text(${start} 至 ${end});
+}
+// 篩選資料並更新儀表板
+function filterData() {
+    const timeLabels = rawData.map(item => ${item.YEAR}-${String(item.MONTH).padStart(2, '0')});
+    const [startIdx, endIdx] = $("#timeRangeSlider").slider("values");
+    const filteredData = rawData.slice(startIdx, endIdx + 1);
+    createDashboard(filteredData);
 }
 
-// 創建儀表板圖表
+document.getElementById('filterButton').addEventListener('click', filterData);
+
+// 建立儀表板
 function createDashboard(data) {
-    const birthDeathData = data.map(item => ({
-        x: item.YEAR,
-        y: item.BIRTH,
-        name: '出生人數',
-        type: 'scatter',
-    }));
+    const months = data.map(item => ${item.YEAR}-${item.MONTH});
+    const birthData = data.map(item => item.BIRTH);
+    const deathData = data.map(item => item.DEATH);
 
-    const increaseComparisonData = data.map(item => ({
-        x: item.YEAR,
-        y: item['NATURE INCREASE'],
-        name: '自然增加',
-        type: 'scatter',
-    }));
+    // 出生與死亡趨勢圖
+    Plotly.newPlot('birthDeathChart', [
+        { x: months, y: birthData, mode: 'lines+markers', name: '出生人數' },
+        { x: months, y: deathData, mode: 'lines+markers', name: '死亡人數' }
+    ], {
+        title: '出生人數與死亡人數',
+        xaxis: { title: '月份' },
+        yaxis: { title: '人數' }
+    });
+    // 自然與社會增加對比圖
+    const naturalIncrease = data.map(item => item['NATURE INCREASE']);
+    const socialIncrease = data.map(item => item['SOCIAL INCREASE']);
+    Plotly.newPlot('increaseComparisonChart', [
+        { x: months, y: naturalIncrease, mode: 'lines+markers', name: '自然增加' },
+        { x: months, y: socialIncrease, mode: 'lines+markers', name: '社會增加' }
+    ], {
+        title: '自然增加與社會增加',
+        xaxis: { title: '月份' },
+        yaxis: { title: '人數' }
+    });
 
-    const populationChangeData = data.map(item => ({
-        x: item.YEAR,
-        y: item.POPULATION,
-        name: '總人口數',
-        type: 'scatter',
-    }));
+    // 總人口變化圖
+    const population = data.map(item => item.POPULATION);
+    Plotly.newPlot('populationChangeChart', [
+        { x: months, y: population, mode: 'lines+markers', name: '總人口數' }
+    ], {
+        title: '總人口數',
+        xaxis: { title: '月份' },
+        yaxis: { title: '人數' }
+    });
 
-    const marriagePopulationData = data.map(item => ({
-        x: item.YEAR,
-        y: item['MARRIAGE'],
-        name: '結婚人口數',
-        type: 'scatter',
-    }));
-
-    Plotly.newPlot('birthDeathChart', birthDeathData);
-    Plotly.newPlot('increaseComparisonChart', increaseComparisonData);
-    Plotly.newPlot('populationChangeChart', populationChangeData);
-    Plotly.newPlot('marriagePopulationRelationChart', marriagePopulationData);
+    // 婚姻變化圖
+    const marriages = data.map(item => item.MARRIAGES);
+    Plotly.newPlot('marriagePopulationRelationChart', [
+        { x: months, y: marriages, mode: 'lines+markers', name: '結婚對數' }
+    ], {
+        title: '結婚對數',
+        xaxis: { title: '月份' },
+        yaxis: { title: '結婚對數' }
+    });
 }
 </script>
-
 </body>
 </html>
-
-
 
 
 
