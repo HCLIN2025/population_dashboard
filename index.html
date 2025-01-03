@@ -40,10 +40,10 @@
             flex-direction: column; /* 垂直排列內容 */
         }
         .birth { background-color: #2a9d8f; } /* 綠色 */
-        .death { background-color: #e9c46a; } /* 紅色 */
-        .population { background-color: #264653; } /* 藍色 */
+        .death { background-color: #e9c46a; } /* 黃色 */
+        .population { background-color: #264653; } /* 深藍色 */
         .natural-increase { background-color: #f4a261; } /* 橙色 */
-        .social-increase { background-color: #e76f51; } /* 紫色 */
+        .social-increase { background-color: #e76f51; } /* 紅色 */
         .data-value {
             font-weight: bold; 
             font-size: 24px; /* 數據字體大於標題 */
@@ -53,18 +53,6 @@
 <body>
 
 <h1>人口互動儀表板</h1>
-
-<div class="slider-container">
-    <label for="yearSlider">選擇年份:</label>
-    <div id="yearSlider"></div>
-    <span id="selectedYear">2021</span>
-
-    <label for="monthSlider">選擇月份:</label>
-    <div id="monthSlider"></div>
-    <span id="selectedMonth">1</span>
-
-    <button id="filterButton">篩選資料</button>
-</div>
 
 <div class="data-container">
     <div class="data-box birth">
@@ -96,6 +84,26 @@
         <p class="data-value" id="socialIncreaseData">0</p>
         <p>上月變動：<span id="socialIncreaseChange">0</span></p>
     </div>
+</div>
+
+<div class="slider-container">
+    <label for="startYearSlider">開始年份:</label>
+    <div id="startYearSlider"></div>
+    <span id="selectedStartYear">2021</span>
+
+    <label for="startMonthSlider">開始月份:</label>
+    <div id="startMonthSlider"></div>
+    <span id="selectedStartMonth">1</span>
+
+    <label for="endYearSlider">結束年份:</label>
+    <div id="endYearSlider"></div>
+    <span id="selectedEndYear">2024</span>
+
+    <label for="endMonthSlider">結束月份:</label>
+    <div id="endMonthSlider"></div>
+    <span id="selectedEndMonth">12</span>
+
+    <button id="filterButton">篩選資料</button>
 </div>
 
 <div id="birthDeathChart" class="chart"></div>
@@ -152,21 +160,21 @@ function createDashboard(data) {
         document.getElementById('populationTitle').innerText = `${item.YEAR}年${item.MONTH}月總人口數`;
         document.getElementById('naturalIncreaseTitle').innerText = `${item.YEAR}年${item.MONTH}月自然增加`;
         document.getElementById('socialIncreaseTitle').innerText = `${item.YEAR}年${item.MONTH}月社會增加`;
-    });
+        
+       // 更新最新的出生和死亡數據
+       document.getElementById('birthData').innerText = birthData[birthData.length - 1];
+       document.getElementById('deathData').innerText = deathData[deathData.length - 1];
+       document.getElementById('populationData').innerText = totalPopulationData[totalPopulationData.length - 1];
+       document.getElementById('naturalIncreaseData').innerText = natureIncreaseData[natureIncreaseData.length - 1];
+       document.getElementById('socialIncreaseData').innerText = socialIncreaseData[socialIncreaseData.length - 1];
 
-   // 更新最新的出生和死亡數據
-   document.getElementById('birthData').innerText = birthData[birthData.length - 1];
-   document.getElementById('deathData').innerText = deathData[deathData.length - 1];
-   document.getElementById('populationData').innerText = totalPopulationData[totalPopulationData.length - 1];
-   document.getElementById('naturalIncreaseData').innerText = natureIncreaseData[natureIncreaseData.length - 1];
-   document.getElementById('socialIncreaseData').innerText = socialIncreaseData[socialIncreaseData.length - 1];
-
-   // 計算上月變動
-   document.getElementById('birthChange').innerText = birthData[birthData.length - 1] - birthData[birthData.length - 2];
-   document.getElementById('deathChange').innerText = deathData[deathData.length - 1] - deathData[deathData.length - 2];
-   document.getElementById('populationChange').innerText = totalPopulationData[totalPopulationData.length - 1] - totalPopulationData[totalPopulationData.length - 2];
-   document.getElementById('naturalIncreaseChange').innerText = natureIncreaseData[natureIncreaseData.length - 1] - natureIncreaseData[natureIncreaseData.length - 2];
-   document.getElementById('socialIncreaseChange').innerText = socialIncreaseData[socialIncreaseData.length - 1] - socialIncreaseData[socialIncreaseData.length - 2];
+       // 計算上月變動
+       document.getElementById('birthChange').innerText = birthData[birthData.length - 1] - birthData[birthData.length - 2];
+       document.getElementById('deathChange').innerText = deathData[deathData.length - 1] - deathData[deathData.length - 2];
+       document.getElementById('populationChange').innerText = totalPopulationData[totalPopulationData.length - 1] - totalPopulationData[totalPopulationData.length - 2];
+       document.getElementById('naturalIncreaseChange').innerText = natureIncreaseData[natureIncreaseData.length - 1] - natureIncreaseData[natureIncreaseData.length - 2];
+       document.getElementById('socialIncreaseChange').innerText = socialIncreaseData[socialIncreaseData.length - 1] - socialIncreaseData[socialIncreaseData.length - 2];
+   });
 
    // 出生與死亡趨勢圖
    const birthDeathTrace1 = {
@@ -251,46 +259,67 @@ function createDashboard(data) {
 
 // 初始化年份和月份滑動條
 $(function() {
-    $("#yearSlider").slider({
-        min: 2021,
-        max: 2024,
-        value: 2021,
-        slide(event, ui) {
-            $("#selectedYear").text(ui.value);
-            updateCharts(); // 更新圖表以反映新的年份篩選器
-        }
-    });
+    
+     // 開始年份滑動條
+     $("#startYearSlider").slider({
+         min: 2021,
+         max: 2024,
+         value: 2021,
+         slide(event, ui) {
+             $("#selectedStartYear").text(ui.value);
+         }
+     });
 
-    $("#monthSlider").slider({
-        min: 1,
-        max: 12,
-        value: 1,
-        slide(event, ui) {
-            $("#selectedMonth").text(ui.value);
-            updateCharts(); // 更新圖表以反映新的月份篩選器
-        }
-    });
+     $("#startMonthSlider").slider({
+         min: 1,
+         max: 12,
+         value: 1,
+         slide(event, ui) {
+             $("#selectedStartMonth").text(ui.value);
+         }
+     });
+
+     // 結束年份滑動條
+     $("#endYearSlider").slider({
+         min: 2021,
+         max: 2024,
+         value: 2024,
+         slide(event, ui) {
+             $("#selectedEndYear").text(ui.value);
+         }
+     });
+
+     $("#endMonthSlider").slider({
+         min: 1,
+         max: 12,
+         value: 12,
+         slide(event, ui) {
+             $("#selectedEndMonth").text(ui.value);
+         }
+     });
 });
-
-// 更新圖表以反映篩選器的變化
-function updateCharts() {
-     // 根據選擇的年份和月份更新圖表的邏輯可以在這裡實現。
-}
 
 // 篩選資料函數
 document.getElementById('filterButton').addEventListener('click', () => {
-    const selectedYear = parseInt($("#yearSlider").slider("value"));
-    const selectedMonth = parseInt($("#monthSlider").slider("value"));
-    
-    // 篩選資料邏輯
-    const filteredData = window.data.filter(item => item.YEAR === selectedYear && item.MONTH === selectedMonth);
+     const startYear = parseInt($("#startYearSlider").slider("value"));
+     const startMonth = parseInt($("#startMonthSlider").slider("value"));
+     const endYear = parseInt($("#endYearSlider").slider("value"));
+     const endMonth = parseInt($("#endMonthSlider").slider("value"));
 
-    createDashboard(filteredData); // 使用篩選後的資料重新創建儀表板
+     // 篩選資料邏輯
+     const filteredData = window.data.filter(item => 
+          (item.YEAR > startYear || (item.YEAR === startYear && item.MONTH >= startMonth)) &&
+          (item.YEAR < endYear || (item.YEAR === endYear && item.MONTH <= endMonth))
+     );
+
+     createDashboard(filteredData); // 使用篩選後的資料重新創建儀表板
 });
 </script>
 
 </body>
 </html>
+
+
 
 
 
