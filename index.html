@@ -328,8 +328,8 @@ function createDashboard(data) {
         title: '自然增加與社會增加',
         xaxis: { title: '月份' },
         yaxis: { title: '人數' },
-        barmode: 'group', // 設定長條圖的顯示模式
-        legend: { orientation: 'h' }
+        barmode: 'stack', // 設定為堆疊模式
+        legend: { orientation: 'h' } // 圖例水平排列
     });
 
     // 總人口變化圖
