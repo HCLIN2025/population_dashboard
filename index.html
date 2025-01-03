@@ -129,81 +129,89 @@
 
 <h1>人口互動儀表板</h1>
 
-<div class="data-container">
-    <div class="data-box birth">
-        <h2 id="birthTitle">最新出生人數</h2>
-        <p class="data-value" id="birthData">0</p>
-        <p id="birthComparison"></p>
-    </div>
 
-    <div class="data-box death">
-        <h2 id="deathTitle">最新死亡人數</h2>
-        <p class="data-value" id="deathData">0</p>
-        <p id="deathComparison"></p>
-    </div>
-
-    <div class="data-box population">
-        <h2 id="populationTitle">最新總人口數</h2>
-        <p class="data-value" id="populationData">0</p>
-        <p id="populationComparison"></p>
-    </div>
-
-    <div class="data-box natural-increase">
-        <h2 id="naturalIncreaseTitle">最新自然增加</h2>
-        <p class="data-value" id="naturalIncreaseData">0</p>
-        <p id="naturalIncreaseComparison"></p>
-    </div>
-
-    <div class="data-box social-increase">
-        <h2 id="socialIncreaseTitle">最新社會增加</h2>
-        <p class="data-value" id="socialIncreaseData">0</p>
-        <p id="socialIncreaseComparison"></p>
-    </div>
-</div>
-
-<div class="cumulative-container">
-    <div class="data-box birth">
-        <h2 id="cumulativeBirthTitle">2024年出生人數(累計至11月)</h2>
-        <p class="data-value" id="cumulativeBirthData">0</p>
-        <p id="cumulativeBirthComparison">與去年同期比較: 0</p>
-    </div>
-
-    <div class="data-box death">
-        <h2 id="cumulativeDeathTitle">2024年死亡人數(累計至11月)</h2>
-        <p class="data-value" id="cumulativeDeathData">0</p>
-        <p id="cumulativeDeathComparison">與去年同期比較: 0</p>
-    </div>
-
-    <div class="data-box population">
-        <h2 id="cumulativePopulationTitle">2024年總人口數(至11月)</h2>
-        <p class="data-value" id="cumulativePopulationData">0</p>
-        <p id="cumulativePopulationComparison">與去年年底比較: 0</p>
-    </div>
-
-    <div class="data-box natural-increase">
-        <h2 id="cumulativeNaturalIncreaseTitle">2024年自然增加(累計至11月)</h2>
-        <p class="data-value" id="cumulativeNaturalIncreaseData">0</p>
-        <p id="cumulativeNaturalIncreaseComparison">與去年同期比較: 0</p>
-    </div>
-
-    <div class="data-box social-increase">
-        <h2 id="cumulativeSocialIncreaseTitle">2024年社會增加(累計至11月)</h2>
-        <p class="data-value" id="cumulativeSocialIncreaseData">0</p>
-        <p id="cumulativeSocialIncreaseComparison">與去年同期比較: 0</p>
+<!-- 第一區：最新人口數據 -->
+<div class="section section1">
+    <h2>最新人口數據</h2>
+    <div class="data-container">
+        <div class="data-box birth">
+            <h2 id="birthTitle">最新出生人數</h2>
+            <p class="data-value" id="birthData">0</p>
+            <p id="birthComparison"></p>
+        </div>
+        <div class="data-box death">
+            <h2 id="deathTitle">最新死亡人數</h2>
+            <p class="data-value" id="deathData">0</p>
+            <p id="deathComparison"></p>
+        </div>
+        <div class="data-box population">
+            <h2 id="populationTitle">最新總人口數</h2>
+            <p class="data-value" id="populationData">0</p>
+            <p id="populationComparison"></p>
+        </div>
+        <div class="data-box natural-increase">
+            <h2 id="naturalIncreaseTitle">最新自然增加</h2>
+            <p class="data-value" id="naturalIncreaseData">0</p>
+            <p id="naturalIncreaseComparison"></p>
+        </div>
+        <div class="data-box social-increase">
+            <h2 id="socialIncreaseTitle">最新社會增加</h2>
+            <p class="data-value" id="socialIncreaseData">0</p>
+            <p id="socialIncreaseComparison"></p>
+        </div>
     </div>
 </div>
 
-<div class="slider-container">
-    <label for="timeRangeSlider">選擇時間範圍:</label>
-    <div id="timeRangeSlider"></div>
-    <span id="selectedTimeRange">2021-01 至 2024-11</span>
-    <button id="filterButton">篩選資料</button>
+<!-- 第二區：年度人口數據 -->
+<div class="section section2">
+    <h2>年度人口數據</h2>
+    <div class="cumulative-container">
+        <div class="data-box birth">
+            <h2 id="cumulativeBirthTitle">2024年出生人數(累計至11月)</h2>
+            <p class="data-value" id="cumulativeBirthData">0</p>
+            <p id="cumulativeBirthComparison">與去年同期比較: 0</p>
+        </div>
+        <div class="data-box death">
+            <h2 id="cumulativeDeathTitle">2024年死亡人數(累計至11月)</h2>
+            <p class="data-value" id="cumulativeDeathData">0</p>
+            <p id="cumulativeDeathComparison">與去年同期比較: 0</p>
+        </div>
+        <div class="data-box population">
+            <h2 id="cumulativePopulationTitle">2024年總人口數(至11月)</h2>
+            <p class="data-value" id="cumulativePopulationData">0</p>
+            <p id="cumulativePopulationComparison">與去年年底比較: 0</p>
+        </div>
+        <div class="data-box natural-increase">
+            <h2 id="cumulativeNaturalIncreaseTitle">2024年自然增加(累計至11月)</h2>
+            <p class="data-value" id="cumulativeNaturalIncreaseData">0</p>
+            <p id="cumulativeNaturalIncreaseComparison">與去年同期比較: 0</p>
+        </div>
+        <div class="data-box social-increase">
+            <h2 id="cumulativeSocialIncreaseTitle">2024年社會增加(累計至11月)</h2>
+            <p class="data-value" id="cumulativeSocialIncreaseData">0</p>
+            <p id="cumulativeSocialIncreaseComparison">與去年同期比較: 0</p>
+        </div>
+    </div>
 </div>
 
+<!-- 第三區：日期篩選器 -->
+<div class="section section3">
+    <h2>人口指標趨勢查詢</h2>
+    <div class="slider-container">
+        <label for="timeRangeSlider">選擇時間範圍:</label>
+        <div id="timeRangeSlider"></div>
+        <span id="selectedTimeRange">2021-01 至 2024-11</span>
+        <button id="filterButton">篩選資料</button>
+    </div>
+</div>
+
+<!-- 圖表區域 -->    
 <div id="birthDeathChart" class="chart"></div>
 <div id="increaseComparisonChart" class="chart"></div>
 <div id="populationChangeChart" class="chart"></div>
 <div id="marriagePopulationRelationChart" class="chart"></div>
+
+
 
 <script>
 // 假設 rawData 是從 API 獲取的數據
