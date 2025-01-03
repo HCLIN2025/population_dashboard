@@ -340,11 +340,11 @@ function createDashboard(data) {
 
     // 出生數與結婚對數趨勢圖
     const births = data.map(item => item.BIRTH);
-    const marriages = data.map(item => item.MARRIAGES);
+    const marriage = data.map(item => item.MARRIAGE);
 
     Plotly.newPlot('marriagePopulationRelationChart', [
         { x: months, y: births, mode: 'lines+markers', name: '出生數' },
-        { x: months, y: marriages, mode: 'lines+markers', name: '結婚對數' }
+        { x: months, y: marriage, mode: 'lines+markers', name: '結婚對數' }
     ], {
         title: '出生數與結婚對數趨勢',
         xaxis: { title: '月份' },
