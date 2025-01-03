@@ -311,7 +311,7 @@ function createDashboard(data) {
         { x: months, y: birthData, mode: 'lines+markers', name: '出生人數' },
         { x: months, y: deathData, mode: 'lines+markers', name: '死亡人數' }
     ], {
-        title: '每月出生與死亡人數',
+        title: '出生與死亡人數',
         xaxis: { title: '月份' },
         yaxis: { title: '人數' }
     });
@@ -323,7 +323,7 @@ function createDashboard(data) {
         { x: months, y: naturalIncrease, mode: 'lines+markers', name: '自然增加' },
         { x: months, y: socialIncrease, mode: 'lines+markers', name: '社會增加' }
     ], {
-        title: '自然增加與社會增加對比',
+        title: '自然增加與社會增加',
         xaxis: { title: '月份' },
         yaxis: { title: '人數' }
     });
@@ -341,7 +341,7 @@ function createDashboard(data) {
     // 婚姻與人口關係圖
     const marriages = data.map(item => item.MARRIAGES);
     Plotly.newPlot('marriagePopulationRelationChart', [
-        { x: months, y: marriages, mode: 'markers', name: '結婚對數' }
+        { x: months, y: marriages, mode: 'lines+markers', name: '結婚對數' }
     ], {
         title: '結婚對數',
         xaxis: { title: '月份' },
