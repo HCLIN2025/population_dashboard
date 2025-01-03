@@ -4,12 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>人口互動式儀表板</title>
-    <!-- 引入 Plotly 圖表庫 -->
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
-    <!-- 引入 jQuery 和 jQuery UI 库 -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
-    <!-- 引入 jQuery UI 樣式 -->
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <style>
         /* 頁面基本樣式 */
@@ -132,88 +129,81 @@
 
 <h1>人口互動儀表板</h1>
 
-<!-- 第一區：最新人口數據 -->
-<div class="section section1">
-    <h2>最新人口數據</h2>
-    <div class="data-container">
-        <div class="data-box birth">
-            <h2 id="birthTitle">最新出生人數</h2>
-            <p class="data-value" id="birthData">0</p>
-            <p id="birthComparison"></p>
-        </div>
-        <div class="data-box death">
-            <h2 id="deathTitle">最新死亡人數</h2>
-            <p class="data-value" id="deathData">0</p>
-            <p id="deathComparison"></p>
-        </div>
-        <div class="data-box population">
-            <h2 id="populationTitle">最新總人口數</h2>
-            <p class="data-value" id="populationData">0</p>
-            <p id="populationComparison"></p>
-        </div>
-        <div class="data-box natural-increase">
-            <h2 id="naturalIncreaseTitle">最新自然增加</h2>
-            <p class="data-value" id="naturalIncreaseData">0</p>
-            <p id="naturalIncreaseComparison"></p>
-        </div>
-        <div class="data-box social-increase">
-            <h2 id="socialIncreaseTitle">最新社會增加</h2>
-            <p class="data-value" id="socialIncreaseData">0</p>
-            <p id="socialIncreaseComparison"></p>
-        </div>
+<div class="data-container">
+    <div class="data-box birth">
+        <h2 id="birthTitle">最新出生人數</h2>
+        <p class="data-value" id="birthData">0</p>
+        <p id="birthComparison"></p>
+    </div>
+
+    <div class="data-box death">
+        <h2 id="deathTitle">最新死亡人數</h2>
+        <p class="data-value" id="deathData">0</p>
+        <p id="deathComparison"></p>
+    </div>
+
+    <div class="data-box population">
+        <h2 id="populationTitle">最新總人口數</h2>
+        <p class="data-value" id="populationData">0</p>
+        <p id="populationComparison"></p>
+    </div>
+
+    <div class="data-box natural-increase">
+        <h2 id="naturalIncreaseTitle">最新自然增加</h2>
+        <p class="data-value" id="naturalIncreaseData">0</p>
+        <p id="naturalIncreaseComparison"></p>
+    </div>
+
+    <div class="data-box social-increase">
+        <h2 id="socialIncreaseTitle">最新社會增加</h2>
+        <p class="data-value" id="socialIncreaseData">0</p>
+        <p id="socialIncreaseComparison"></p>
     </div>
 </div>
 
-<!-- 第二區：年度人口數據 -->
-<div class="section section2">
-    <h2>年度人口數據</h2>
-    <div class="cumulative-container">
-        <div class="data-box birth">
-            <h2 id="cumulativeBirthTitle">2024年出生人數(累計至11月)</h2>
-            <p class="data-value" id="cumulativeBirthData">0</p>
-            <p id="cumulativeBirthComparison">與去年同期比較: 0</p>
-        </div>
-        <div class="data-box death">
-            <h2 id="cumulativeDeathTitle">2024年死亡人數(累計至11月)</h2>
-            <p class="data-value" id="cumulativeDeathData">0</p>
-            <p id="cumulativeDeathComparison">與去年同期比較: 0</p>
-        </div>
-        <div class="data-box population">
-            <h2 id="cumulativePopulationTitle">2024年總人口數(至11月)</h2>
-            <p class="data-value" id="cumulativePopulationData">0</p>
-            <p id="cumulativePopulationComparison">與去年年底比較: 0</p>
-        </div>
-        <div class="data-box natural-increase">
-            <h2 id="cumulativeNaturalIncreaseTitle">2024年自然增加(累計至11月)</h2>
-            <p class="data-value" id="cumulativeNaturalIncreaseData">0</p>
-            <p id="cumulativeNaturalIncreaseComparison">與去年同期比較: 0</p>
-        </div>
-        <div class="data-box social-increase">
-            <h2 id="cumulativeSocialIncreaseTitle">2024年社會增加(累計至11月)</h2>
-            <p class="data-value" id="cumulativeSocialIncreaseData">0</p>
-            <p id="cumulativeSocialIncreaseComparison">與去年同期比較: 0</p>
-        </div>
+<div class="cumulative-container">
+    <div class="data-box birth">
+        <h2 id="cumulativeBirthTitle">2024年出生人數(累計至11月)</h2>
+        <p class="data-value" id="cumulativeBirthData">0</p>
+        <p id="cumulativeBirthComparison">與去年同期比較: 0</p>
+    </div>
+
+    <div class="data-box death">
+        <h2 id="cumulativeDeathTitle">2024年死亡人數(累計至11月)</h2>
+        <p class="data-value" id="cumulativeDeathData">0</p>
+        <p id="cumulativeDeathComparison">與去年同期比較: 0</p>
+    </div>
+
+    <div class="data-box population">
+        <h2 id="cumulativePopulationTitle">2024年總人口數(至11月)</h2>
+        <p class="data-value" id="cumulativePopulationData">0</p>
+        <p id="cumulativePopulationComparison">與去年年底比較: 0</p>
+    </div>
+
+    <div class="data-box natural-increase">
+        <h2 id="cumulativeNaturalIncreaseTitle">2024年自然增加(累計至11月)</h2>
+        <p class="data-value" id="cumulativeNaturalIncreaseData">0</p>
+        <p id="cumulativeNaturalIncreaseComparison">與去年同期比較: 0</p>
+    </div>
+
+    <div class="data-box social-increase">
+        <h2 id="cumulativeSocialIncreaseTitle">2024年社會增加(累計至11月)</h2>
+        <p class="data-value" id="cumulativeSocialIncreaseData">0</p>
+        <p id="cumulativeSocialIncreaseComparison">與去年同期比較: 0</p>
     </div>
 </div>
 
-<!-- 第三區：日期篩選器 -->
-<div class="section section3">
-    <h2>人口指標趨勢查詢</h2>
-    <div class="slider-container">
-        <label for="timeRangeSlider">選擇時間範圍:</label>
-        <div id="timeRangeSlider"></div>
-        <span id="selectedTimeRange">2021-01 至 2024-11</span>
-        <button id="filterButton">篩選資料</button>
-    </div>
+<div class="slider-container">
+    <label for="timeRangeSlider">選擇時間範圍:</label>
+    <div id="timeRangeSlider"></div>
+    <span id="selectedTimeRange">2021-01 至 2024-11</span>
+    <button id="filterButton">篩選資料</button>
 </div>
 
-<!-- 圖表區域 -->    
 <div id="birthDeathChart" class="chart"></div>
 <div id="increaseComparisonChart" class="chart"></div>
 <div id="populationChangeChart" class="chart"></div>
 <div id="marriagePopulationRelationChart" class="chart"></div>
-
-
 
 <script>
 // 假設 rawData 是從 API 獲取的數據
@@ -236,45 +226,45 @@ function displayLatestData() {
     const previousYear = rawData.find(item => item.YEAR === latest.YEAR - 1 && item.MONTH === latest.MONTH) || {};
 
     document.getElementById('birthData').innerText = latest.BIRTH;
-    document.getElementById('birthComparison').innerHTML = 
+    document.getElementById('birthComparison').innerHTML = `
         與上月比較：${(latest.BIRTH - (previousMonth.BIRTH || 0))}<br>
         與去年同月比較：${(latest.BIRTH - (previousYear.BIRTH || 0))}
-    ;
+    `;
 
     document.getElementById('deathData').innerText = latest.DEATH;
-    document.getElementById('deathComparison').innerHTML = 
+    document.getElementById('deathComparison').innerHTML = `
         與上月比較：${(latest.DEATH - (previousMonth.DEATH || 0))}<br>
         與去年同月比較：${(latest.DEATH - (previousYear.DEATH || 0))}
-    ;
+    `;
 
     document.getElementById('populationData').innerText = latest.POPULATION;
-    document.getElementById('populationComparison').innerHTML = 
+    document.getElementById('populationComparison').innerHTML = `
         與上月比較：${(latest.POPULATION - (previousMonth.POPULATION || 0))}<br>
         與去年同月比較：${(latest.POPULATION - (previousYear.POPULATION || 0))}
-    ;
+    `;
 
     document.getElementById('naturalIncreaseData').innerText = latest['NATURE INCREASE'];
-    document.getElementById('naturalIncreaseComparison').innerHTML = 
+    document.getElementById('naturalIncreaseComparison').innerHTML = `
         與上月比較：${(latest['NATURE INCREASE'] - (previousMonth['NATURE INCREASE'] || 0))}<br>
         與去年同月比較：${(latest['NATURE INCREASE'] - (previousYear['NATURE INCREASE'] || 0))}
-    ;
+    `;
 
     document.getElementById('socialIncreaseData').innerText = latest['SOCIAL INCREASE'];
-    document.getElementById('socialIncreaseComparison').innerHTML = 
+    document.getElementById('socialIncreaseComparison').innerHTML = `
         與上月比較：${(latest['SOCIAL INCREASE'] - (previousMonth['SOCIAL INCREASE'] || 0))}<br>
         與去年同月比較：${(latest['SOCIAL INCREASE'] - (previousYear['SOCIAL INCREASE'] || 0))}
-    ;
+    `;
 
-    document.getElementById('birthTitle').innerText = ${latest.YEAR}年${latest.MONTH}月出生人數;
-    document.getElementById('deathTitle').innerText = ${latest.YEAR}年${latest.MONTH}月死亡人數;
-    document.getElementById('populationTitle').innerText = ${latest.YEAR}年${latest.MONTH}月總人口數;
-    document.getElementById('naturalIncreaseTitle').innerText = ${latest.YEAR}年${latest.MONTH}月自然增加;
-    document.getElementById('socialIncreaseTitle').innerText = ${latest.YEAR}年${latest.MONTH}月社會增加;
+    document.getElementById('birthTitle').innerText = `${latest.YEAR}年${latest.MONTH}月出生人數`;
+    document.getElementById('deathTitle').innerText = `${latest.YEAR}年${latest.MONTH}月死亡人數`;
+    document.getElementById('populationTitle').innerText = `${latest.YEAR}年${latest.MONTH}月總人口數`;
+    document.getElementById('naturalIncreaseTitle').innerText = `${latest.YEAR}年${latest.MONTH}月自然增加`;
+    document.getElementById('socialIncreaseTitle').innerText = `${latest.YEAR}年${latest.MONTH}月社會增加`;
 }
 
 // 初始化滑動條
 function initializeSlider() {
-    const timeLabels = rawData.map(item => ${item.YEAR}-${String(item.MONTH).padStart(2, '0')});
+    const timeLabels = rawData.map(item => `${item.YEAR}-${String(item.MONTH).padStart(2, '0')}`);
 
     $("#timeRangeSlider").slider({
         range: true,
@@ -284,17 +274,17 @@ function initializeSlider() {
         slide: function(event, ui) {
             const start = timeLabels[ui.values[0]];
             const end = timeLabels[ui.values[1]];
-            $("#selectedTimeRange").text(${start} 至 ${end});
+            $("#selectedTimeRange").text(`${start} 至 ${end}`);
         }
     });
 
     const start = timeLabels[0];
     const end = timeLabels[timeLabels.length - 1];
-    $("#selectedTimeRange").text(${start} 至 ${end});
+    $("#selectedTimeRange").text(`${start} 至 ${end}`);
 }
 // 篩選資料並更新儀表板
 function filterData() {
-    const timeLabels = rawData.map(item => ${item.YEAR}-${String(item.MONTH).padStart(2, '0')});
+    const timeLabels = rawData.map(item => `${item.YEAR}-${String(item.MONTH).padStart(2, '0')}`);
     const [startIdx, endIdx] = $("#timeRangeSlider").slider("values");
     const filteredData = rawData.slice(startIdx, endIdx + 1);
     createDashboard(filteredData);
@@ -304,7 +294,7 @@ document.getElementById('filterButton').addEventListener('click', filterData);
 
 // 建立儀表板
 function createDashboard(data) {
-    const months = data.map(item => ${item.YEAR}-${item.MONTH});
+    const months = data.map(item => `${item.YEAR}-${item.MONTH}`);
     const birthData = data.map(item => item.BIRTH);
     const deathData = data.map(item => item.DEATH);
 
@@ -313,18 +303,19 @@ function createDashboard(data) {
         { x: months, y: birthData, mode: 'lines+markers', name: '出生人數' },
         { x: months, y: deathData, mode: 'lines+markers', name: '死亡人數' }
     ], {
-        title: '出生與死亡人數',
+        title: '每月出生與死亡人數',
         xaxis: { title: '月份' },
         yaxis: { title: '人數' }
     });
-// 自然與社會增加對比圖
-const naturalIncrease = data.map(item => item['NATURE INCREASE']);
+
+    // 自然與社會增加對比圖
+    const naturalIncrease = data.map(item => item['NATURE INCREASE']);
     const socialIncrease = data.map(item => item['SOCIAL INCREASE']);
     Plotly.newPlot('increaseComparisonChart', [
         { x: months, y: naturalIncrease, mode: 'lines+markers', name: '自然增加' },
         { x: months, y: socialIncrease, mode: 'lines+markers', name: '社會增加' }
     ], {
-        title: '自然增加與社會增加',
+        title: '自然增加與社會增加對比',
         xaxis: { title: '月份' },
         yaxis: { title: '人數' }
     });
@@ -339,10 +330,10 @@ const naturalIncrease = data.map(item => item['NATURE INCREASE']);
         yaxis: { title: '人數' }
     });
 
-    // 婚姻狀況
+    // 婚姻與人口關係圖
     const marriages = data.map(item => item.MARRIAGES);
     Plotly.newPlot('marriagePopulationRelationChart', [
-        { x: months, y: marriages, mode: 'lines+markers', name: '結婚對數' }
+        { x: months, y: marriages, mode: 'markers', name: '結婚對數' }
     ], {
         title: '結婚對數',
         xaxis: { title: '月份' },
@@ -352,7 +343,6 @@ const naturalIncrease = data.map(item => item['NATURE INCREASE']);
 </script>
 </body>
 </html>
-
 
 
 
