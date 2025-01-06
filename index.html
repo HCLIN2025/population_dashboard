@@ -318,10 +318,10 @@ function createAnnualDashboard(data) {
         .reduce((sum, item) => sum + item['SOCIAL INCREASE'], 0);
 
     // 更新顯示的數據
-    document.getElementById('cumulativeBirthData').innerText = cumulativeBirthData; // 最新年份的累計出生數
-    document.getElementById('cumulativeDeathData').innerText = cumulativeDeathData; // 最新年份的累計死亡數
-    document.getElementById('cumulativeNaturalIncreaseData').innerText = cumulativeNaturalIncreaseData; // 最新年份的自然增加
-    document.getElementById('cumulativeSocialIncreaseData').innerText = cumulativeSocialIncreaseData; // 最新年份的社會增加
+    document.getElementById('cumulativeBirthData').innerText = cumulativeBirthData; 
+    document.getElementById('cumulativeDeathData').innerText = cumulativeDeathData; 
+    document.getElementById('cumulativeNaturalIncreaseData').innerText = cumulativeNaturalIncreaseData; 
+    document.getElementById('cumulativeSocialIncreaseData').innerText = cumulativeSocialIncreaseData; 
 
     // 與去年同期比較
     if (latestYear > years[0]) { // 確保有去年數據可比對
