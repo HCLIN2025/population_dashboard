@@ -324,10 +324,13 @@ function displayAnnualDashboard(data) {
     document.getElementById('cumulativeNaturalIncreaseData').innerText = cumulativeNaturalIncreaseData; 
     document.getElementById('cumulativeSocialIncreaseData').innerText = cumulativeSocialIncreaseData; 
 
-    // 與去年同期比較
+    // 與去年同期和全年比較
     if (latestYear > years[0]) { // 確保有去年數據可比對
         const lastYearCumulativeBirth = data.filter(item => item.YEAR === (latestYear - 1) && item.MONTH <= latestMonth)
             .reduce((sum, item) => sum + item.BIRTH, 0);
+        const lastYearFullCumulativeBirth = data.filter(item => item.YEAR === (latestYear - 1) && item.MONTH === 12)
+            .reduce((sum, item) => sum + item.BIRTH, 0);    
+
         const lastYearCumulativeDeath = data.filter(item => item.YEAR === (latestYear - 1) && item.MONTH <= latestMonth)
             .reduce((sum, item) => sum + item.DEATH, 0);
         const lastYearCumulativeNaturalIncrease = data.filter(item => item.YEAR === (latestYear - 1) && item.MONTH <= latestMonth)
@@ -336,7 +339,9 @@ function displayAnnualDashboard(data) {
             .reduce((sum, item) => sum + item['SOCIAL INCREASE'], 0);
 
         document.getElementById('cumulativeBirthComparison').innerText =
-            `與去年同期比較: ${cumulativeBirthData - lastYearCumulativeBirth}`;
+            `與去年同期比較: ${cumulativeBirthData - lastYearCumulativeBirth}<br>`
+            `與去年全年比較: ${cumulativeBirthData - lastYearFullCumulativeBirth}<br>`;
+            
         document.getElementById('cumulativeDeathComparison').innerText =
             `與去年同期比較: ${cumulativeDeathData - lastYearCumulativeDeath}`;
         document.getElementById('cumulativeNaturalIncreaseComparison').innerText =
