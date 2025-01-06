@@ -319,7 +319,7 @@ function createAnnualDashboard(data) {
         .reduce((sum, item) => sum + item['SOCIAL INCREASE'], 0);
 
     // 更新顯示的數據
-    document.getElementById('cumulativeBirthData').innerText = cumulativeBirthData; 
+    document.getElementById('latestCumulativeBirthData').innerText = cumulativeBirthData; 
     document.getElementById('cumulativeDeathData').innerText = cumulativeDeathData; 
     document.getElementById('cumulativeNaturalIncreaseData').innerText = cumulativeNaturalIncreaseData; 
     document.getElementById('cumulativeSocialIncreaseData').innerText = cumulativeSocialIncreaseData; 
