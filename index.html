@@ -305,42 +305,43 @@ function createAnnualDashboard(data) {
     const latestYear = data[data.length - 1].YEAR; // 最新年份
 
     // 計算最新一年截至最新一筆月份的累計數
-    const cumulativeBirthData = years.map(year => {
-        const currentYearData = data.filter(item => item.YEAR === year && item.MONTH <= latestMonth);
-        return currentYearData.reduce((sum, item) => sum + item.BIRTH, 0);
-    });
-
-    const cumulativeDeathData = years.map(year => {
-        const currentYearData = data.filter(item => item.YEAR === year && item.MONTH <= latestMonth);
-        return currentYearData.reduce((sum, item) => sum + item.DEATH, 0);
-    });
-
-    const cumulativeNaturalIncreaseData = years.map(year => {
-        const currentYearData = data.filter(item => item.YEAR === year && item.MONTH <= latestMonth);
-        return currentYearData.reduce((sum, item) => sum + item['NATURE INCREASE'], 0);
-    });
-
-    const cumulativeSocialIncreaseData = years.map(year => {
-        const currentYearData = data.filter(item => item.YEAR === year && item.MONTH <= latestMonth);
-        return currentYearData.reduce((sum, item) => sum + item['SOCIAL INCREASE'], 0);
-    });
+    const cumulativeBirthData = data.filter(item => item.YEAR === latestYear && item.MONTH <= latestMonth)
+        .reduce((sum, item) => sum + item.BIRTH, 0);
+        
+    const cumulativeDeathData = data.filter(item => item.YEAR === latestYear && item.MONTH <= latestMonth)
+        .reduce((sum, item) => sum + item.DEATH, 0);
+        
+    const cumulativeNaturalIncreaseData = data.filter(item => item.YEAR === latestYear && item.MONTH <= latestMonth)
+        .reduce((sum, item) => sum + item['NATURE INCREASE'], 0);
+        
+    const cumulativeSocialIncreaseData = data.filter(item => item.YEAR === latestYear && item.MONTH <= latestMonth)
+        .reduce((sum, item) => sum + item['SOCIAL INCREASE'], 0);
 
     // 更新顯示的數據
-    document.getElementById('cumulativeBirthData').innerText = cumulativeBirthData[latestYear - years[0]]; // 最新年份的累計出生數
-    document.getElementById('cumulativeDeathData').innerText = cumulativeDeathData[latestYear - years[0]]; // 最新年份的累計死亡數
-    document.getElementById('cumulativeNaturalIncreaseData').innerText = cumulativeNaturalIncreaseData[latestYear - years[0]]; // 最新年份的自然增加
-    document.getElementById('cumulativeSocialIncreaseData').innerText = cumulativeSocialIncreaseData[latestYear - years[0]]; // 最新年份的社會增加
+    document.getElementById('cumulativeBirthData').innerText = cumulativeBirthData; // 最新年份的累計出生數
+    document.getElementById('cumulativeDeathData').innerText = cumulativeDeathData; // 最新年份的累計死亡數
+    document.getElementById('cumulativeNaturalIncreaseData').innerText = cumulativeNaturalIncreaseData; // 最新年份的自然增加
+    document.getElementById('cumulativeSocialIncreaseData').innerText = cumulativeSocialIncreaseData; // 最新年份的社會增加
 
     // 與去年同期比較
-    if (latestYear > years[0] + 1) { // 確保有去年數據可比對
+    if (latestYear > years[0]) { // 確保有去年數據可比對
+        const lastYearCumulativeBirth = data.filter(item => item.YEAR === (latestYear - 1) && item.MONTH <= latestMonth)
+            .reduce((sum, item) => sum + item.BIRTH, 0);
+        const lastYearCumulativeDeath = data.filter(item => item.YEAR === (latestYear - 1) && item.MONTH <= latestMonth)
+            .reduce((sum, item) => sum + item.DEATH, 0);
+        const lastYearCumulativeNaturalIncrease = data.filter(item => item.YEAR === (latestYear - 1) && item.MONTH <= latestMonth)
+            .reduce((sum, item) => sum + item['NATURE INCREASE'], 0);
+        const lastYearCumulativeSocialIncrease = data.filter(item => item.YEAR === (latestYear - 1) && item.MONTH <= latestMonth)
+            .reduce((sum, item) => sum + item['SOCIAL INCREASE'], 0);
+
         document.getElementById('cumulativeBirthComparison').innerText =
-            `與去年同期比較: ${cumulativeBirthData[latestYear - years[0]] - cumulativeBirthData[(latestYear - 1) - years[0]]}`;
+            `與去年同期比較: ${cumulativeBirthData - lastYearCumulativeBirth}`;
         document.getElementById('cumulativeDeathComparison').innerText =
-            `與去年同期比較: ${cumulativeDeathData[latestYear - years[0]] - cumulativeDeathData[(latestYear - 1) - years[0]]}`;
+            `與去年同期比較: ${cumulativeDeathData - lastYearCumulativeDeath}`;
         document.getElementById('cumulativeNaturalIncreaseComparison').innerText =
-            `與去年同期比較: ${cumulativeNaturalIncreaseData[latestYear - years[0]] - cumulativeNaturalIncreaseData[(latestYear - 1) - years[0]]}`;
+            `與去年同期比較: ${cumulativeNaturalIncreaseData - lastYearCumulativeNaturalIncrease}`;
         document.getElementById('cumulativeSocialIncreaseComparison').innerText =
-            `與去年同期比較: ${cumulativeSocialIncreaseData[latestYear - years[0]] - cumulativeSocialIncreaseData[(latestYear - 1) - years[0]]}`;
+            `與去年同期比較: ${cumulativeSocialIncreaseData - lastYearCumulativeSocialIncrease}`;
     }
 
     // 總人口數（取最新年份最後一筆月份的數字）
@@ -349,11 +350,12 @@ function createAnnualDashboard(data) {
 
     // 與去年同期（同月）和全年的比較
     const lastYearPopulation = data.find(item => item.YEAR === (latestYear - 1) && item.MONTH === latestMonth);
+    const lastYearFullPopulation = data.find(item => item.YEAR === (latestYear - 1) && item.MONTH === 12);
+
     document.getElementById('cumulativePopulationComparison').innerHTML =
         `與去年同期比較: ${latestPopulation.POPULATION - (lastYearPopulation ? lastYearPopulation.POPULATION : 0)}<br>` +
-        `與去年全年比較: ${latestPopulation.POPULATION - (data.find(item => item.YEAR === (latestYear - 1) && item.MONTH === 12)?.POPULATION || 0)}`;
+        `與去年全年比較: ${latestPopulation.POPULATION - (lastYearFullPopulation ? lastYearFullPopulation.POPULATION : 0)}`;
 }
-
 
 /// 初始化年度滑動條
 function initializeYearSlider() {
