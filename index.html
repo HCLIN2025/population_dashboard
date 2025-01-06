@@ -250,6 +250,7 @@ fetch('https://raw.githubusercontent.com/HCLIN2025/population_dashboard/main/dat
         rawData = data;
         displayLatestData();
         initializeSlider();
+        initializeYearSlider(); // 添加這一行以初始化年度滑動條
         createDashboard(data);
     });
 
@@ -296,26 +297,25 @@ function displayLatestData() {
     document.getElementById('socialIncreaseTitle').innerText = `${latest.YEAR}年${latest.MONTH}月社會增加`;
 }
 
-// 初始化年度滑動條
+/// 初始化年度滑動條
 function initializeYearSlider() {
-    const years = [...new Set(rawData.map(item => item.YEAR))];
+         const years = [...new Set(rawData.map(item => item.YEAR))];
+         $("#yearRangeSlider").slider({
+             range: true,
+             min: 0,
+             max: years.length - 1,
+             values: [0, years.length - 1],
+             slide: function(event, ui) {
+                 const start = years[ui.values[0]];
+                 const end = years[ui.values[1]];
+                 $("#selectedYearRange").text(`${start} 至 ${end}`);
+             }
+         });
+         const start = years[0];
+         const end = years[years.length - 1];
+         $("#selectedYearRange").text(`${start} 至 ${end}`);
+     }
 
-    $("#yearRangeSlider").slider({
-        range: true,
-        min: 0,
-        max: years.length - 1,
-        values: [0, years.length - 1],
-        slide: function(event, ui) {
-            const start = years[ui.values[0]];
-            const end = years[ui.values[1]];
-            $("#selectedYearRange").text(`${start} 至 ${end}`);
-        }
-    });
-
-    const start = years[0];
-    const end = years[years.length - 1];
-    $("#selectedYearRange").text(`${start} 至 ${end}`);
-}
 
 // 初始化月滑動條
 function initializeSlider() {
@@ -340,16 +340,17 @@ function initializeSlider() {
 
 // 篩選年度資料並更新儀表板
 function filterYearData() {
-    const years = [...new Set(rawData.map(item => item.YEAR))];
-    const [startIdx, endIdx] = $("#yearRangeSlider").slider("values");
-    const startYear = years[startIdx];
-    const endYear = years[endIdx];
+         const years = [...new Set(rawData.map(item => item.YEAR))];
+         const [startIdx, endIdx] = $("#yearRangeSlider").slider("values");
+         const startYear = years[startIdx];
+         const endYear = years[endIdx];
 
-    const filteredData = rawData.filter(item => item.YEAR >= startYear && item.YEAR <= endYear);
-    createAnnualDashboard(filteredData);
-}
+         const filteredData = rawData.filter(item => item.YEAR >= startYear && item.YEAR <= endYear);
+         
+         createAnnualDashboard(filteredData);
+     }
 
-document.getElementById('yearFilterButton').addEventListener('click', filterYearData);
+     document.getElementById('yearFilterButton').addEventListener('click', filterYearData);
 
 
 
@@ -367,84 +368,76 @@ document.getElementById('filterButton').addEventListener('click', filterData);
 
 // 建立年資料儀表板
 function createAnnualDashboard(data) {
-    const years = [...new Set(data.map(item => item.YEAR))];
-     // 計算年度出生數據
-     const birthData = years.map(year => {
-        return data.filter(item => item.YEAR === year)
-            .reduce((sum, item) => sum + item.BIRTH, 0);
-    });
+         const years = [...new Set(data.map(item => item.YEAR))];
 
-    // 計算年度死亡數據
-    const deathData = years.map(year => {
-        return data.filter(item => item.YEAR === year)
-            .reduce((sum, item) => sum + item.DEATH, 0);
-    });
+         // 計算年度出生與死亡數據
+         const birthData = years.map(year => data.filter(item => item.YEAR === year)
+             .reduce((sum, item) => sum + item.BIRTH, 0));
+         
+         const deathData = years.map(year => data.filter(item => item.YEAR === year)
+             .reduce((sum, item) => sum + item.DEATH, 0));
 
-    // 出生與死亡圖
-    Plotly.newPlot('annualBirthDeathChart', [
-        { x: years, y: birthData, mode: 'lines+markers', name: '年度出生人數' },
-        { x: years, y: deathData, mode: 'lines+markers', name: '年度死亡人數' }
-    ], {
-        title: '年度出生與死亡人數',
-        xaxis: { title: '年份' },
-        yaxis: { title: '人數' }
-    });
+         // 總人口數（取每年的12月份）
+         const populationData = years.map(year => {
+             const latestDecemberData = data.find(item => item.YEAR === year && item.MONTH === 12);
+             return latestDecemberData ? latestDecemberData.POPULATION : 0;
+         });
 
-    // 計算年度自然增長與社會增長數據
-    const naturalIncreaseData = years.map(year => {
-        return data.filter(item => item.YEAR === year)
-            .reduce((sum, item) => sum + item['NATURE INCREASE'], 0);
-    });
+         // 出生與死亡圖
+         Plotly.newPlot('annualBirthDeathChart', [
+             { x: years, y: birthData, mode: 'lines+markers', name: '年度出生人數' },
+             { x: years, y: deathData, mode: 'lines+markers', name: '年度死亡人數' }
+         ], {
+             title: '年度出生與死亡人數',
+             xaxis: { title: '年份' },
+             yaxis: { title: '人數' }
+         });
 
-    const socialIncreaseData = years.map(year => {
-        return data.filter(item => item.YEAR === year)
-            .reduce((sum, item) => sum + item['SOCIAL INCREASE'], 0);
-    });
+         // 自然增長與社會增長對比圖
+         const naturalIncreaseData = years.map(year => data.filter(item => item.YEAR === year)
+             .reduce((sum, item) => sum + item['NATURE INCREASE'], 0));
+         
+         const socialIncreaseData = years.map(year => data.filter(item => item.YEAR === year)
+             .reduce((sum, item) => sum + item['SOCIAL INCREASE'], 0));
 
-    // 自然增長與社會增長對比圖
-    Plotly.newPlot('annualIncreaseComparisonChart', [
-        { x: years, y: naturalIncreaseData, type: 'bar', name: '年度自然增長', marker: { color: 'blue' } },
-        { x: years, y: socialIncreaseData, type: 'bar', name: '年度社會增長', marker: { color: 'orange' } }
-    ], {
-        title: '年度自然增長與社會增長對比',
-        xaxis: { title: '年份' },
-        yaxis: { title: '人數' },
-        barmode: 'stack', // 堆疊顯示
-        legend: { orientation: 'h' } // 水平排列圖例
-    });
+         Plotly.newPlot('annualIncreaseComparisonChart', [
+             { x: years, y: naturalIncreaseData, type:'bar', name:'年度自然增長', marker:{color:'blue'} },
+             { x: years, y:socialIncreaseData, type:'bar', name:'年度社會增長', marker:{color:'orange'} },
+         ],{
+              title:'年度自然增長與社會增長對比',
+              xaxis:{title:'年份'},
+              yaxis:{title:'人數'},
+              barmode:'stack',
+              legend:{orientation:'h'}
+           });
 
-    // 計算年度總人口數
-    const populationData = years.map(year => {
-        const latestData = data.filter(item => item.YEAR === year).pop();
-        return latestData ? latestData.POPULATION : 0;
-    });
+           // 總人口變化趨勢圖
+           Plotly.newPlot('annualPopulationChangeChart', [
+               { x :years , y :populationData , mode :'lines+markers' , name :'年度總人口數' }],{
+                   title :'年度總人口數變化',
+                   xaxis :{title :'年份'},
+                   yaxis :{title :'人數'}
+           });
 
-    // 總人口變化趨勢圖
-    Plotly.newPlot('annualPopulationChangeChart', [
-        { x: years, y: populationData, mode: 'lines+markers', name: '年度總人口數' }
-    ], {
-        title: '年度總人口數變化',
-        xaxis: { title: '年份' },
-        yaxis: { title: '人數' }
-    });
+           // 婚姻對比圖
+           const marriageData=years.map(year=> data.filter(item=>item.YEAR===year)
+               .reduce((sum,item)=>sum+item.MARRIAGE ,0));
 
-    // 計算年度婚姻數
-    const marriageData = years.map(year => {
-        return data.filter(item => item.YEAR === year)
-            .reduce((sum, item) => sum + item.MARRIAGE, 0);
-    });
+           Plotly.newPlot('annualMarriagePopulationRelationChart',[{
+               x :years,
+               y :marriageData,
+               type :'bar',
+               name :'年度婚姻數',
+               marker :{color :'orange'}
+           }],{
+               title :'年度婚姻與人口關係',
+               xaxis :{title :'年份'},
+               yaxis :{title :'結婚對數'},
+               barmode :'group',
+               legend :{orientation :'h'}
+           });
+       }
 
-    // 婚姻數與人口關係圖
-    Plotly.newPlot('annualMarriagePopulationRelationChart', [
-        { x: years, y: marriageData, type: 'bar', name: '年度婚姻數', marker: { color: 'orange' } }
-    ], {
-        title: '年度婚姻數與人口關係',
-        xaxis: { title: '年份' },
-        yaxis: { title: '結婚對數' },
-        barmode: 'group', // 分組顯示
-        legend: { orientation: 'h' } // 水平排列圖例
-    });
-}
    
 
 // 建立月資料儀表板
