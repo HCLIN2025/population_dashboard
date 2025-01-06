@@ -176,27 +176,27 @@
         <div class="data-box birth">
             <h2 id="cumulativeBirthTitle">最新年度出生人數(截至最新月份)</h2>
             <p class="data-value" id="cumulativeBirthData">0</p>
-            <p id="cumulativeBirthComparison"></p>
+            <p id="cumulativeBirthComparison">與去年同期比較: 0</p>
         </div>
         <div class="data-box death">
             <h2 id="cumulativeDeathTitle">最新年度死亡人數(截至最新月份)</h2>
             <p class="data-value" id="cumulativeDeathData">0</p>
-            <p id="cumulativeDeathComparison"></p>
+            <p id="cumulativeDeathComparison">與去年同期比較: 0</p>
         </div>
         <div class="data-box population">
             <h2 id="cumulativePopulationTitle">最新年度總人口數(截至最新月份)</h2>
             <p class="data-value" id="cumulativePopulationData">0</p>
-            <p id="cumulativePopulationComparison"></p>
+            <p id="cumulativePopulationComparison">與去年年底比較: 0</p>
         </div>
         <div class="data-box natural-increase">
             <h2 id="cumulativeNaturalIncreaseTitle">最新年度自然增加(截至最新月份)</h2>
             <p class="data-value" id="cumulativeNaturalIncreaseData">0</p>
-            <p id="cumulativeNaturalIncreaseComparison"></p>
+            <p id="cumulativeNaturalIncreaseComparison">與去年同期比較: 0</p>
         </div>
         <div class="data-box social-increase">
             <h2 id="cumulativeSocialIncreaseTitle">最新年度社會增加(截至最新月份)</h2>
             <p class="data-value" id="cumulativeSocialIncreaseData">0</p>
-            <p id="cumulativeSocialIncreaseComparison"></p>
+            <p id="cumulativeSocialIncreaseComparison">與去年同期比較: 0</p>
         </div>
     </div>
 </div>
@@ -334,29 +334,16 @@ function displayAnnualDashboard(data) {
             .reduce((sum, item) => sum + item['NATURE INCREASE'], 0);
         const lastYearCumulativeSocialIncrease = data.filter(item => item.YEAR === (latestYear - 1) && item.MONTH <= latestMonth)
             .reduce((sum, item) => sum + item['SOCIAL INCREASE'], 0);
-    // 去年全年的累計數
-        const lastYearFullBirth = data.filter(item => item.YEAR === (latestYear - 1))
-            .reduce((sum, item) => sum + item.BIRTH, 0);
-        const lastYearFullDeath = data.filter(item => item.YEAR === (latestYear - 1))
-            .reduce((sum, item) => sum + item.DEATH, 0);
-        const lastYearFullNaturalIncrease = data.filter(item => item.YEAR === (latestYear - 1))
-            .reduce((sum, item) => sum + item['NATURE INCREASE'], 0);
-        const lastYearFullSocialIncrease = data.filter(item => item.YEAR === (latestYear - 1))
-            .reduce((sum, item) => sum + item['SOCIAL INCREASE'], 0);   
 
         document.getElementById('cumulativeBirthComparison').innerText =
-            `與去年同期比較: ${cumulativeBirthData - lastYearCumulativeBirth}`<br>
-            `與去年全年比較: ${cumulativeBirthData - lastYearFullBirth}`;
+            `與去年同期比較: ${cumulativeBirthData - lastYearCumulativeBirth}`;
         document.getElementById('cumulativeDeathComparison').innerText =
-            `與去年同期比較: ${cumulativeDeathData - lastYearCumulativeDeath}`<br>
-            `與去年全年比較: ${cumulativeDeathData - lastYearFullDeath}`;;
+            `與去年同期比較: ${cumulativeDeathData - lastYearCumulativeDeath}`;
         document.getElementById('cumulativeNaturalIncreaseComparison').innerText =
-            `與去年同期比較: ${cumulativeNaturalIncreaseData - lastYearCumulativeNaturalIncrease}`<br>
-            `與去年全年比較: ${cumulativeNaturalIncreaseData - lastYearFullNaturalIncrease}`;
+            `與去年同期比較: ${cumulativeNaturalIncreaseData - lastYearCumulativeNaturalIncrease}`;
         document.getElementById('cumulativeSocialIncreaseComparison').innerText =
-            `與去年同期比較: ${cumulativeSocialIncreaseData - lastYearCumulativeSocialIncrease}`<br>
-            `與去年全年比較: ${cumulativeSocialIncreaseData - lastYearFullSocialIncrease}`;
-
+            `與去年同期比較: ${cumulativeSocialIncreaseData - lastYearCumulativeSocialIncrease}`;
+    }
 
     // 總人口數（取最新年份最後一筆月份的數字）
     const latestPopulation = data.find(item => item.YEAR === latestYear && item.MONTH === latestMonth);
@@ -369,7 +356,7 @@ function displayAnnualDashboard(data) {
     document.getElementById('cumulativePopulationComparison').innerHTML =
         `與去年同期比較: ${latestPopulation.POPULATION - (lastYearPopulation ? lastYearPopulation.POPULATION : 0)}<br>` +
         `與去年全年比較: ${latestPopulation.POPULATION - (lastYearFullPopulation ? lastYearFullPopulation.POPULATION : 0)}`;
-}}
+}
 
 /// 初始化年度滑動條
 function initializeYearSlider() {
