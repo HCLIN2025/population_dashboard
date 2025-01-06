@@ -173,30 +173,31 @@
 <div class="section section2">
     <h2>最新年度人口數據</h2>
     <div class="cumulative-container">
-        <div class="data-box birth">
-            <h2 id="cumulativeBirthTitle">2024年出生人數(累計至11月)</h2>
-            <p class="data-value" id="cumulativeBirthData">0</p>
-            <p id="cumulativeBirthComparison">與去年同期比較: 0</p>
-        </div>
-        <div class="data-box death">
-            <h2 id="cumulativeDeathTitle">2024年死亡人數(累計至11月)</h2>
-            <p class="data-value" id="cumulativeDeathData">0</p>
-            <p id="cumulativeDeathComparison">與去年同期比較: 0</p>
-        </div>
-        <div class="data-box population">
-            <h2 id="cumulativePopulationTitle">2024年總人口數(至11月)</h2>
-            <p class="data-value" id="cumulativePopulationData">0</p>
-            <p id="cumulativePopulationComparison">與去年年底比較: 0</p>
-        </div>
-        <div class="data-box natural-increase">
-            <h2 id="cumulativeNaturalIncreaseTitle">2024年自然增加(累計至11月)</h2>
-            <p class="data-value" id="cumulativeNaturalIncreaseData">0</p>
-            <p id="cumulativeNaturalIncreaseComparison">與去年同期比較: 0</p>
-        </div>
-        <div class="data-box social-increase">
-            <h2 id="cumulativeSocialIncreaseTitle">2024年社會增加(累計至11月)</h2>
-            <p class="data-value" id="cumulativeSocialIncreaseData">0</p>
-            <p id="cumulativeSocialIncreaseComparison">與去年同期比較: 0</p>
+        <div class="cumulative-container">
+            <div class="data-box birth">
+                <h2 id="latestCumulativeBirthTitle">最新年度出生人數(截至最新月份)</h2>
+                <p class="data-value" id="latestCumulativeBirthData">0</p>
+                <p id="latestCumulativeBirthComparison">與去年同期比較: 0</p>
+            </div>
+            <div class="data-box death">
+                <h2 id="latestCumulativeDeathTitle">最新年度死亡人數(截至最新月份)</h2>
+                <p class="data-value" id="latestCumulativeDeathData">0</p>
+                <p id="latestCumulativeDeathComparison">與去年同期比較: 0</p>
+            </div>
+            <div class="data-box population">
+                <h2 id="latestPopulationTitle">最新年度總人口數(截至最新月份)</h2>
+                <p class="data-value" id="latestPopulationData">0</p>
+                <p id="latestPopulationComparison">與去年同期比較: 0</p>
+            </div>
+            <div class="data-box natural-increase">
+                <h2 id="latestNaturalIncreaseTitle">最新年度自然增加(截至最新月份)</h2>
+                <p class="data-value" id="latestNaturalIncreaseData">0</p>
+                <p id="latestNaturalIncreaseComparison">與去年同期比較: 0</p>
+            </div>
+            <div class="data-box social-increase">
+                <h2 id="latestSocialIncreaseTitle">最新年度社會增加(截至最新月份)</h2>
+                <p class="data-value" id="latestSocialIncreaseData">0</p>
+                <p id="latestSocialIncreaseComparison">與去年同期比較: 0</p>
         </div>
     </div>
 </div>
@@ -355,7 +356,28 @@ function createAnnualDashboard(data) {
     document.getElementById('cumulativePopulationComparison').innerHTML =
         `與去年同期比較: ${latestPopulation.POPULATION - (lastYearPopulation ? lastYearPopulation.POPULATION : 0)}<br>` +
         `與去年全年比較: ${latestPopulation.POPULATION - (lastYearFullPopulation ? lastYearFullPopulation.POPULATION : 0)}`;
+
+    // 更新新區塊的數據顯示
+    document.getElementById('latestCumulativeBirthData').innerText = cumulativeBirthData;
+    document.getElementById('latestCumulativeDeathData').innerText = cumulativeDeathData;
+    document.getElementById('latestPopulationData').innerText = latestPopulation ? latestPopulation.POPULATION : 0;
+    document.getElementById('latestNaturalIncreaseData').innerText = cumulativeNaturalIncreaseData;
+    document.getElementById('latestSocialIncreaseData').innerText = cumulativeSocialIncreaseData;
+
+    // 更新新區塊的同比和全年的比較
+    document.getElementById('latestCumulativeBirthComparison').innerText =
+        `與去年同期比較: ${cumulativeBirthData - lastYearCumulativeBirth}`;
+    
+    document.getElementById('latestCumulativeDeathComparison').innerText =
+        `與去年同期比較: ${cumulativeDeathData - lastYearCumulativeDeath}`;
+    
+    document.getElementById('latestNaturalIncreaseComparison').innerText =
+        `與去年同期比較: ${cumulativeNaturalIncreaseData - lastYearCumulativeNaturalIncrease}`;
+    
+    document.getElementById('latestSocialIncreaseComparison').innerText =
+        `與去年同期比較: ${cumulativeSocialIncreaseData - lastYearCumulativeSocialIncrease}`;
 }
+
 
 /// 初始化年度滑動條
 function initializeYearSlider() {
