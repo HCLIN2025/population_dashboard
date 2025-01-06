@@ -130,6 +130,12 @@
         .cumulative-container .data-box {
             flex-basis: 30%;
         }
+
+        /* 調整比較文本的字體大小和間距 */
+        .cumulative-container p {
+            font-size: 16px; /* 調整比較文本字體大小 */
+            margin: 5px 0; /* 設定上下邊距為5px，減少間距 */
+        }
     </style>
 </head>
 <body>
@@ -339,15 +345,28 @@ function displayAnnualDashboard(data) {
             .reduce((sum, item) => sum + item['NATURE INCREASE'], 0);
         const lastYearCumulativeSocialIncrease = data.filter(item => item.YEAR === (latestYear - 1) && item.MONTH <= latestMonth)
             .reduce((sum, item) => sum + item['SOCIAL INCREASE'], 0);
+        
+        const lastYearFullBirth = data.filter(item => item.YEAR === (latestYear - 1))
+            .reduce((sum, item) => sum + item.BIRTH, 0);
+        const lastYearFullDeath = data.filter(item => item.YEAR === (latestYear - 1))
+            .reduce((sum, item) => sum + item.Death, 0);       
+        const lastYearFullNaturalIncrease = data.filter(item => item.YEAR === (latestYear - 1))
+            .reduce((sum, item) => sum + item['NATURE INCREASE'], 0);
+        const lastYearFullSocialIncrease = data.filter(item => item.YEAR === (latestYear - 1))
+            .reduce((sum, item) => sum + item['SOCIAL INCREASE'], 0);       
 
         document.getElementById('cumulativeBirthComparison').innerText =
-            `與去年同期比較: ${cumulativeBirthData - lastYearCumulativeBirth}`;
+            `與去年同期比較: ${cumulativeBirthData - lastYearCumulativeBirth}<br>` +
+            `與去年全年比較: ${cumulativeBirthData - lastYearFullBirth}`;
         document.getElementById('cumulativeDeathComparison').innerText =
-            `與去年同期比較: ${cumulativeDeathData - lastYearCumulativeDeath}`;
+            `與去年同期比較: ${cumulativeDeathData - lastYearCumulativeDeath}<br>` +
+            `與去年全年比較: ${cumulativeDeathData - lastYearFullDeath}`;
         document.getElementById('cumulativeNaturalIncreaseComparison').innerText =
-            `與去年同期比較: ${cumulativeNaturalIncreaseData - lastYearCumulativeNaturalIncrease}`;
+            `與去年同期比較: ${cumulativeNaturalIncreaseData - lastYearCumulativeNaturalIncrease}<br>` +
+            `與去年全年比較: ${cumulativeNaturalIncreaseData - lastYearFullNaturalIncrease}`;
         document.getElementById('cumulativeSocialIncreaseComparison').innerText =
-            `與去年同期比較: ${cumulativeSocialIncreaseData - lastYearCumulativeSocialIncrease}`;
+            `與去年同期比較: ${cumulativeSocialIncreaseData - lastYearCumulativeSocialIncrease}<br>` +
+            `與去年全年比較: ${cumulativeSocialIncreaseData - lastYearFullSocialIncrease}`;
     }
 
     // 總人口數（取最新年份最後一筆月份的數字）
