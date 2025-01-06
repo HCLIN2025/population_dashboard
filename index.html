@@ -28,40 +28,42 @@
             margin-top: 10px;
         }
 
-        /* 設定篩選器容器寬度為頁面寬度的1/3，並將篩選器置左 */
-        .slider-container {
-            margin-bottom: 30px;
-            width: 33%;
-            margin-left: 0;
-            padding-bottom: 15px;
-        }
+        /* 日期篩選器 */
 
-        /* 設置篩選器滑動條背景顏色 */
-        #timeRangeSlider {
-            background: #ffffff;
-        }
+            /* 設定篩選器容器寬度為頁面寬度的1/3，並將篩選器置左 */
+            .slider-container {
+                margin-bottom: 30px;
+                width: 33%;
+                margin-left: 0;
+                padding-bottom: 15px;
+            }
 
-        /* 設置已選區域的顏色 */
-        .ui-slider .ui-slider-range {
-            background: #ff8760 !important;
-        }
+            /* 設置篩選器滑動條背景顏色 */
+            #timeRangeSlider {
+                background: #ffffff;
+            }
 
-        /* 設置滑動條的拖動點顏色 */
-        .ui-slider .ui-slider-handle {
-            background: #000000 !important;
-            border-color: #ffffff !important;
-        }
+            /* 設置已選區域的顏色 */
+            .ui-slider .ui-slider-range {
+                background: #ff8760 !important;
+            }
 
-        /* 設置篩選資料按鈕間距 */
-        #filterButton {
-            margin-top: 15px;
-        }
+            /* 設置滑動條的拖動點顏色 */
+            .ui-slider .ui-slider-handle {
+                background: #000000 !important;
+                border-color: #ffffff !important;
+            }
 
-        /* 設置篩選器滑動條最大寬度 */
-        .slider-container .ui-slider {
-            width: 100%;
-            margin-left: 0;
-        }
+            /* 設置篩選資料按鈕間距 */
+            #filterButton {
+                margin-top: 15px;
+            }
+
+            /* 設置篩選器滑動條最大寬度 */
+            .slider-container .ui-slider {
+                width: 100%;
+                margin-left: 0;
+            }
 
         /* 數據區域容器 */
         .data-container {
@@ -76,20 +78,24 @@
             padding: 20px;
             border-radius: 8px;
         }
-
         /* 各區塊背景顏色 */
         .section1 {
-            background-color: #e0f7fa; /* 淺藍色 */
-        }
+                    background-color: #e0f7fa; /* 淺藍色 */
+                }
 
-        .section2 {
-            background-color: #fff3e0; /* 淺橙色 */
-        }
+                .section2 {
+                    background-color: #fff3e0; /* 淺橙色 */
+                }
 
-        .section3 {
-            background-color: #e8f5e9; /* 淺綠色 */
-        }
+                .section3 {
+                    background-color: #e8f5e9; /* 淺綠色 */
+                }
 
+                .section4 {
+                    background-color: #f0e0f1; /* 淺紫色 */
+                }
+
+        
         /* 數據卡片樣式 */
         .data-box {
             padding: 20px;
@@ -100,6 +106,7 @@
             display: flex;
             flex-direction: column;
         }
+
         .birth { background-color: #2a9d8f; }
         .death { background-color: #e9c46a; }
         .population { background-color: #264653; }
@@ -194,9 +201,28 @@
     </div>
 </div>
 
-<!-- 第三區：日期篩選器 -->
+<!-- 第三區：年日期篩選器 -->
 <div class="section section3">
-    <h2>人口指標趨勢查詢</h2>
+    <h2>年度人口指標趨勢查詢</h2>
+    <div class="slider-container">
+        <label for="yearRangeSlider">選擇年度範圍:</label>
+        <div id="yearRangeSlider"></div>
+        <span id="selectedYearRange">2021 至 2024</span>
+        <button id="yearFilterButton">篩選資料</button>
+    </div>
+</div>
+
+<!-- 基於年資料的圖表 -->
+<div id="annualBirthDeathChart" class="chart"></div>
+<div id="annualIncreaseComparisonChart" class="chart"></div>
+<div id="annualPopulationChangeChart" class="chart"></div>
+<div id="annualMarriagePopulationRelationChart" class="chart"></div>
+
+
+
+<!-- 第四區：月日期篩選器 -->
+<div class="section section4">
+    <h2>月度人口指標趨勢查詢</h2>
     <div class="slider-container">
         <label for="timeRangeSlider">選擇時間範圍:</label>
         <div id="timeRangeSlider"></div>
@@ -205,7 +231,7 @@
     </div>
 </div>
 
-<!-- 圖表區域 -->    
+<!-- 基於月資料的圖表 -->    
 <div id="birthDeathChart" class="chart"></div>
 <div id="increaseComparisonChart" class="chart"></div>
 <div id="populationChangeChart" class="chart"></div>
@@ -270,7 +296,28 @@ function displayLatestData() {
     document.getElementById('socialIncreaseTitle').innerText = `${latest.YEAR}年${latest.MONTH}月社會增加`;
 }
 
-// 初始化滑動條
+// 初始化年度滑動條
+function initializeYearSlider() {
+    const years = [...new Set(rawData.map(item => item.YEAR))];
+
+    $("#yearRangeSlider").slider({
+        range: true,
+        min: 0,
+        max: years.length - 1,
+        values: [0, years.length - 1],
+        slide: function(event, ui) {
+            const start = years[ui.values[0]];
+            const end = years[ui.values[1]];
+            $("#selectedYearRange").text(`${start} 至 ${end}`);
+        }
+    });
+
+    const start = years[0];
+    const end = years[years.length - 1];
+    $("#selectedYearRange").text(`${start} 至 ${end}`);
+}
+
+// 初始化月滑動條
 function initializeSlider() {
     const timeLabels = rawData.map(item => `${item.YEAR}-${String(item.MONTH).padStart(2, '0')}`);
 
@@ -290,7 +337,24 @@ function initializeSlider() {
     const end = timeLabels[timeLabels.length - 1];
     $("#selectedTimeRange").text(`${start} 至 ${end}`);
 }
-// 篩選資料並更新儀表板
+
+// 篩選年度資料並更新儀表板
+function filterYearData() {
+    const years = [...new Set(rawData.map(item => item.YEAR))];
+    const [startIdx, endIdx] = $("#yearRangeSlider").slider("values");
+    const startYear = years[startIdx];
+    const endYear = years[endIdx];
+
+    const filteredData = rawData.filter(item => item.YEAR >= startYear && item.YEAR <= endYear);
+    createAnnualDashboard(filteredData);
+}
+
+document.getElementById('yearFilterButton').addEventListener('click', filterYearData);
+
+
+
+
+// 篩選月資料並更新儀表板
 function filterData() {
     const timeLabels = rawData.map(item => `${item.YEAR}-${String(item.MONTH).padStart(2, '0')}`);
     const [startIdx, endIdx] = $("#timeRangeSlider").slider("values");
@@ -300,7 +364,90 @@ function filterData() {
 
 document.getElementById('filterButton').addEventListener('click', filterData);
 
-// 建立儀表板
+
+// 建立年資料儀表板
+function createAnnualDashboard(data) {
+    const years = [...new Set(data.map(item => item.YEAR))];
+     // 計算年度出生數據
+     const birthData = years.map(year => {
+        return data.filter(item => item.YEAR === year)
+            .reduce((sum, item) => sum + item.BIRTH, 0);
+    });
+
+    // 計算年度死亡數據
+    const deathData = years.map(year => {
+        return data.filter(item => item.YEAR === year)
+            .reduce((sum, item) => sum + item.DEATH, 0);
+    });
+
+    // 出生與死亡圖
+    Plotly.newPlot('annualBirthDeathChart', [
+        { x: years, y: birthData, mode: 'lines+markers', name: '年度出生人數' },
+        { x: years, y: deathData, mode: 'lines+markers', name: '年度死亡人數' }
+    ], {
+        title: '年度出生與死亡人數',
+        xaxis: { title: '年份' },
+        yaxis: { title: '人數' }
+    });
+
+    // 計算年度自然增長與社會增長數據
+    const naturalIncreaseData = years.map(year => {
+        return data.filter(item => item.YEAR === year)
+            .reduce((sum, item) => sum + item['NATURE INCREASE'], 0);
+    });
+
+    const socialIncreaseData = years.map(year => {
+        return data.filter(item => item.YEAR === year)
+            .reduce((sum, item) => sum + item['SOCIAL INCREASE'], 0);
+    });
+
+    // 自然增長與社會增長對比圖
+    Plotly.newPlot('annualIncreaseComparisonChart', [
+        { x: years, y: naturalIncreaseData, type: 'bar', name: '年度自然增長', marker: { color: 'blue' } },
+        { x: years, y: socialIncreaseData, type: 'bar', name: '年度社會增長', marker: { color: 'orange' } }
+    ], {
+        title: '年度自然增長與社會增長對比',
+        xaxis: { title: '年份' },
+        yaxis: { title: '人數' },
+        barmode: 'stack', // 堆疊顯示
+        legend: { orientation: 'h' } // 水平排列圖例
+    });
+
+    // 計算年度總人口數
+    const populationData = years.map(year => {
+        const latestData = data.filter(item => item.YEAR === year).pop();
+        return latestData ? latestData.POPULATION : 0;
+    });
+
+    // 總人口變化趨勢圖
+    Plotly.newPlot('annualPopulationChangeChart', [
+        { x: years, y: populationData, mode: 'lines+markers', name: '年度總人口數' }
+    ], {
+        title: '年度總人口數變化',
+        xaxis: { title: '年份' },
+        yaxis: { title: '人數' }
+    });
+
+    // 計算年度婚姻數
+    const marriageData = years.map(year => {
+        return data.filter(item => item.YEAR === year)
+            .reduce((sum, item) => sum + item.MARRIAGE, 0);
+    });
+
+    // 婚姻數與人口關係圖
+    Plotly.newPlot('annualMarriagePopulationRelationChart', [
+        { x: years, y: marriageData, type: 'bar', name: '年度婚姻數', marker: { color: 'orange' } }
+    ], {
+        title: '年度婚姻數與人口關係',
+        xaxis: { title: '年份' },
+        yaxis: { title: '結婚對數' },
+        barmode: 'group', // 分組顯示
+        legend: { orientation: 'h' } // 水平排列圖例
+    });
+}
+   
+
+// 建立月資料儀表板
 function createDashboard(data) {
     const months = data.map(item => `${item.YEAR}-${item.MONTH}`);
     const birthData = data.map(item => item.BIRTH);
@@ -361,12 +508,8 @@ function createDashboard(data) {
         legend: { orientation: 'h' } // 水平顯示圖例
     });
 }
+
+</script>
 </script>
 </body>
 </html>
-
-
-
-
-
-
