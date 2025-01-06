@@ -173,31 +173,30 @@
 <div class="section section2">
     <h2>最新年度人口數據</h2>
     <div class="cumulative-container">
-        <div class="cumulative-container">
-            <div class="data-box birth">
-                <h2 id="latestCumulativeBirthTitle">最新年度出生人數(截至最新月份)</h2>
-                <p class="data-value" id="latestCumulativeBirthData">0</p>
-                <p id="latestCumulativeBirthComparison">與去年同期比較: 0</p>
-            </div>
-            <div class="data-box death">
-                <h2 id="latestCumulativeDeathTitle">最新年度死亡人數(截至最新月份)</h2>
-                <p class="data-value" id="latestCumulativeDeathData">0</p>
-                <p id="latestCumulativeDeathComparison">與去年同期比較: 0</p>
-            </div>
-            <div class="data-box population">
-                <h2 id="latestPopulationTitle">最新年度總人口數(截至最新月份)</h2>
-                <p class="data-value" id="latestPopulationData">0</p>
-                <p id="latestPopulationComparison">與去年同期比較: 0</p>
-            </div>
-            <div class="data-box natural-increase">
-                <h2 id="latestCumulativeNaturalIncreaseTitle">最新年度自然增加(截至最新月份)</h2>
-                <p class="data-value" id="latestCumulativeNaturalIncreaseData">0</p>
-                <p id="latestCumulativeNaturalIncreaseComparison">與去年同期比較: 0</p>
-            </div>
-            <div class="data-box social-increase">
-                <h2 id="latestCumulativeSocialIncreaseTitle">最新年度社會增加(截至最新月份)</h2>
-                <p class="data-value" id="latestCumulativeSocialIncreaseData">0</p>
-                <p id="latestCumulativeSocialIncreaseComparison">與去年同期比較: 0</p>
+        <div class="data-box birth">
+            <h2 id="cumulativeBirthTitle">2024年出生人數(累計至11月)</h2>
+            <p class="data-value" id="cumulativeBirthData">0</p>
+            <p id="cumulativeBirthComparison">與去年同期比較: 0</p>
+        </div>
+        <div class="data-box death">
+            <h2 id="cumulativeDeathTitle">2024年死亡人數(累計至11月)</h2>
+            <p class="data-value" id="cumulativeDeathData">0</p>
+            <p id="cumulativeDeathComparison">與去年同期比較: 0</p>
+        </div>
+        <div class="data-box population">
+            <h2 id="cumulativePopulationTitle">2024年總人口數(至11月)</h2>
+            <p class="data-value" id="cumulativePopulationData">0</p>
+            <p id="cumulativePopulationComparison">與去年年底比較: 0</p>
+        </div>
+        <div class="data-box natural-increase">
+            <h2 id="cumulativeNaturalIncreaseTitle">2024年自然增加(累計至11月)</h2>
+            <p class="data-value" id="cumulativeNaturalIncreaseData">0</p>
+            <p id="cumulativeNaturalIncreaseComparison">與去年同期比較: 0</p>
+        </div>
+        <div class="data-box social-increase">
+            <h2 id="cumulativeSocialIncreaseTitle">2024年社會增加(累計至11月)</h2>
+            <p class="data-value" id="cumulativeSocialIncreaseData">0</p>
+            <p id="cumulativeSocialIncreaseComparison">與去年同期比較: 0</p>
         </div>
     </div>
 </div>
@@ -250,7 +249,6 @@ fetch('https://raw.githubusercontent.com/HCLIN2025/population_dashboard/main/dat
     .then(data => {
         rawData = data;
         displayLatestData();
-        displayLatestYearData();
         initializeSlider();
         initializeYearSlider(); // 添加這一行以初始化年度滑動條
         createAnnualDashboard(rawData);
@@ -301,7 +299,7 @@ function displayLatestData() {
 }
 
 // 建立最新年度資料
-function displayLatestYearData() {
+function createAnnualDashboard(data) {
     const years = [...new Set(data.map(item => item.YEAR))];
     const latestMonth = data[data.length - 1].MONTH; // 最新月份
     const latestYear = data[data.length - 1].YEAR; // 最新年份
@@ -320,10 +318,10 @@ function displayLatestYearData() {
         .reduce((sum, item) => sum + item['SOCIAL INCREASE'], 0);
 
     // 更新顯示的數據
-    document.getElementById('latestCumulativeBirthData').innerText = cumulativeBirthData; 
-    document.getElementById('latestCumulativeDeathData').innerText = cumulativeDeathData; 
-    document.getElementById('latestCumulativeNaturalIncreaseData').innerText = cumulativeNaturalIncreaseData; 
-    document.getElementById('latestCumulativeSocialIncreaseData').innerText = cumulativeSocialIncreaseData; 
+    document.getElementById('cumulativeBirthData').innerText = cumulativeBirthData; 
+    document.getElementById('cumulativeDeathData').innerText = cumulativeDeathData; 
+    document.getElementById('cumulativeNaturalIncreaseData').innerText = cumulativeNaturalIncreaseData; 
+    document.getElementById('cumulativeSocialIncreaseData').innerText = cumulativeSocialIncreaseData; 
 
     // 與去年同期比較
     if (latestYear > years[0]) { // 確保有去年數據可比對
@@ -336,30 +334,28 @@ function displayLatestYearData() {
         const lastYearCumulativeSocialIncrease = data.filter(item => item.YEAR === (latestYear - 1) && item.MONTH <= latestMonth)
             .reduce((sum, item) => sum + item['SOCIAL INCREASE'], 0);
 
-        document.getElementById('latestCumulativeBirthComparison').innerText =
+        document.getElementById('cumulativeBirthComparison').innerText =
             `與去年同期比較: ${cumulativeBirthData - lastYearCumulativeBirth}`;
-        document.getElementById('latestCumulativeDeathComparison').innerText =
+        document.getElementById('cumulativeDeathComparison').innerText =
             `與去年同期比較: ${cumulativeDeathData - lastYearCumulativeDeath}`;
-        document.getElementById('latestCumulativeNaturalIncreaseComparison').innerText =
+        document.getElementById('cumulativeNaturalIncreaseComparison').innerText =
             `與去年同期比較: ${cumulativeNaturalIncreaseData - lastYearCumulativeNaturalIncrease}`;
-        document.getElementById('latestCumulativeSocialIncreaseComparison').innerText =
+        document.getElementById('cumulativeSocialIncreaseComparison').innerText =
             `與去年同期比較: ${cumulativeSocialIncreaseData - lastYearCumulativeSocialIncrease}`;
     }
 
     // 總人口數（取最新年份最後一筆月份的數字）
     const latestPopulation = data.find(item => item.YEAR === latestYear && item.MONTH === latestMonth);
-    document.getElementById('latestPopulationData').innerText = latestPopulation ? latestPopulation.POPULATION : 0;
+    document.getElementById('cumulativePopulationData').innerText = latestPopulation ? latestPopulation.POPULATION : 0;
 
     // 與去年同期（同月）和全年的比較
     const lastYearPopulation = data.find(item => item.YEAR === (latestYear - 1) && item.MONTH === latestMonth);
     const lastYearFullPopulation = data.find(item => item.YEAR === (latestYear - 1) && item.MONTH === 12);
 
-    document.getElementById('latestPopulationComparison').innerHTML =
+    document.getElementById('cumulativePopulationComparison').innerHTML =
         `與去年同期比較: ${latestPopulation.POPULATION - (lastYearPopulation ? lastYearPopulation.POPULATION : 0)}<br>` +
         `與去年全年比較: ${latestPopulation.POPULATION - (lastYearFullPopulation ? lastYearFullPopulation.POPULATION : 0)}`;
-
 }
-
 
 /// 初始化年度滑動條
 function initializeYearSlider() {
