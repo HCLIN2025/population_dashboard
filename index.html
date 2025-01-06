@@ -249,6 +249,7 @@ fetch('https://raw.githubusercontent.com/HCLIN2025/population_dashboard/main/dat
     .then(data => {
         rawData = data;
         displayLatestData();
+        displayAnnualDashboard();
         initializeSlider();
         initializeYearSlider(); // 添加這一行以初始化年度滑動條
         createAnnualDashboard(rawData);
@@ -299,7 +300,7 @@ function displayLatestData() {
 }
 
 // 建立最新年度資料
-function createAnnualDashboard(data) {
+function displayAnnualDashboard(data) {
     const years = [...new Set(data.map(item => item.YEAR))];
     const latestMonth = data[data.length - 1].MONTH; // 最新月份
     const latestYear = data[data.length - 1].YEAR; // 最新年份
