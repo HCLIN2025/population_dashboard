@@ -190,14 +190,14 @@
                 <p id="latestPopulationComparison">與去年同期比較: 0</p>
             </div>
             <div class="data-box natural-increase">
-                <h2 id="latestNaturalIncreaseTitle">最新年度自然增加(截至最新月份)</h2>
-                <p class="data-value" id="latestNaturalIncreaseData">0</p>
-                <p id="latestNaturalIncreaseComparison">與去年同期比較: 0</p>
+                <h2 id="latestCumulativeNaturalIncreaseTitle">最新年度自然增加(截至最新月份)</h2>
+                <p class="data-value" id="latestCumulativeNaturalIncreaseData">0</p>
+                <p id="latestCumulativeNaturalIncreaseComparison">與去年同期比較: 0</p>
             </div>
             <div class="data-box social-increase">
-                <h2 id="latestSocialIncreaseTitle">最新年度社會增加(截至最新月份)</h2>
-                <p class="data-value" id="latestSocialIncreaseData">0</p>
-                <p id="latestSocialIncreaseComparison">與去年同期比較: 0</p>
+                <h2 id="latestCumulativeSocialIncreaseTitle">最新年度社會增加(截至最新月份)</h2>
+                <p class="data-value" id="latestCumulativeSocialIncreaseData">0</p>
+                <p id="latestCumulativeSocialIncreaseComparison">與去年同期比較: 0</p>
         </div>
     </div>
 </div>
@@ -250,6 +250,7 @@ fetch('https://raw.githubusercontent.com/HCLIN2025/population_dashboard/main/dat
     .then(data => {
         rawData = data;
         displayLatestData();
+        displayLatestYearData();
         initializeSlider();
         initializeYearSlider(); // 添加這一行以初始化年度滑動條
         createAnnualDashboard(rawData);
@@ -300,7 +301,7 @@ function displayLatestData() {
 }
 
 // 建立最新年度資料
-function createAnnualDashboard(data) {
+function displayLatestYearData() {
     const years = [...new Set(data.map(item => item.YEAR))];
     const latestMonth = data[data.length - 1].MONTH; // 最新月份
     const latestYear = data[data.length - 1].YEAR; // 最新年份
@@ -320,9 +321,9 @@ function createAnnualDashboard(data) {
 
     // 更新顯示的數據
     document.getElementById('latestCumulativeBirthData').innerText = cumulativeBirthData; 
-    document.getElementById('cumulativeDeathData').innerText = cumulativeDeathData; 
-    document.getElementById('cumulativeNaturalIncreaseData').innerText = cumulativeNaturalIncreaseData; 
-    document.getElementById('cumulativeSocialIncreaseData').innerText = cumulativeSocialIncreaseData; 
+    document.getElementById('latestCumulativeDeathData').innerText = cumulativeDeathData; 
+    document.getElementById('latestCumulativeNaturalIncreaseData').innerText = cumulativeNaturalIncreaseData; 
+    document.getElementById('latestCumulativeSocialIncreaseData').innerText = cumulativeSocialIncreaseData; 
 
     // 與去年同期比較
     if (latestYear > years[0]) { // 確保有去年數據可比對
@@ -335,47 +336,28 @@ function createAnnualDashboard(data) {
         const lastYearCumulativeSocialIncrease = data.filter(item => item.YEAR === (latestYear - 1) && item.MONTH <= latestMonth)
             .reduce((sum, item) => sum + item['SOCIAL INCREASE'], 0);
 
-        document.getElementById('cumulativeBirthComparison').innerText =
+        document.getElementById('latestCumulativeBirthComparison').innerText =
             `與去年同期比較: ${cumulativeBirthData - lastYearCumulativeBirth}`;
-        document.getElementById('cumulativeDeathComparison').innerText =
+        document.getElementById('latestCumulativeDeathComparison').innerText =
             `與去年同期比較: ${cumulativeDeathData - lastYearCumulativeDeath}`;
-        document.getElementById('cumulativeNaturalIncreaseComparison').innerText =
+        document.getElementById('latestCumulativeNaturalIncreaseComparison').innerText =
             `與去年同期比較: ${cumulativeNaturalIncreaseData - lastYearCumulativeNaturalIncrease}`;
-        document.getElementById('cumulativeSocialIncreaseComparison').innerText =
+        document.getElementById('latestCumulativeSocialIncreaseComparison').innerText =
             `與去年同期比較: ${cumulativeSocialIncreaseData - lastYearCumulativeSocialIncrease}`;
     }
 
     // 總人口數（取最新年份最後一筆月份的數字）
     const latestPopulation = data.find(item => item.YEAR === latestYear && item.MONTH === latestMonth);
-    document.getElementById('cumulativePopulationData').innerText = latestPopulation ? latestPopulation.POPULATION : 0;
+    document.getElementById('latestPopulationData').innerText = latestPopulation ? latestPopulation.POPULATION : 0;
 
     // 與去年同期（同月）和全年的比較
     const lastYearPopulation = data.find(item => item.YEAR === (latestYear - 1) && item.MONTH === latestMonth);
     const lastYearFullPopulation = data.find(item => item.YEAR === (latestYear - 1) && item.MONTH === 12);
 
-    document.getElementById('cumulativePopulationComparison').innerHTML =
+    document.getElementById('latestPopulationComparison').innerHTML =
         `與去年同期比較: ${latestPopulation.POPULATION - (lastYearPopulation ? lastYearPopulation.POPULATION : 0)}<br>` +
         `與去年全年比較: ${latestPopulation.POPULATION - (lastYearFullPopulation ? lastYearFullPopulation.POPULATION : 0)}`;
 
-    // 更新新區塊的數據顯示
-    document.getElementById('latestCumulativeBirthData').innerText = cumulativeBirthData;
-    document.getElementById('latestCumulativeDeathData').innerText = cumulativeDeathData;
-    document.getElementById('latestPopulationData').innerText = latestPopulation ? latestPopulation.POPULATION : 0;
-    document.getElementById('latestNaturalIncreaseData').innerText = cumulativeNaturalIncreaseData;
-    document.getElementById('latestSocialIncreaseData').innerText = cumulativeSocialIncreaseData;
-
-    // 更新新區塊的同比和全年的比較
-    document.getElementById('latestCumulativeBirthComparison').innerText =
-        `與去年同期比較: ${cumulativeBirthData - lastYearCumulativeBirth}`;
-    
-    document.getElementById('latestCumulativeDeathComparison').innerText =
-        `與去年同期比較: ${cumulativeDeathData - lastYearCumulativeDeath}`;
-    
-    document.getElementById('latestNaturalIncreaseComparison').innerText =
-        `與去年同期比較: ${cumulativeNaturalIncreaseData - lastYearCumulativeNaturalIncrease}`;
-    
-    document.getElementById('latestSocialIncreaseComparison').innerText =
-        `與去年同期比較: ${cumulativeSocialIncreaseData - lastYearCumulativeSocialIncrease}`;
 }
 
 
