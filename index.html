@@ -340,11 +340,11 @@ function displayAnnualDashboard(data) {
             .reduce((sum, item) => sum + item['NATURE INCREASE'], 0);
         const lastYearCumulativeSocialIncrease = data.filter(item => item.YEAR === (latestYear - 1) && item.MONTH <= latestMonth)
             .reduce((sum, item) => sum + item['SOCIAL INCREASE'], 0);
-        
+    // 與去年全年比較
         const lastYearFullBirth = data.filter(item => item.YEAR === (latestYear - 1))
             .reduce((sum, item) => sum + item.BIRTH, 0);
         const lastYearFullDeath = data.filter(item => item.YEAR === (latestYear - 1))
-            .reduce((sum, item) => sum + item.Death, 0);       
+            .reduce((sum, item) => sum + item.DEATH, 0);       
         const lastYearFullNaturalIncrease = data.filter(item => item.YEAR === (latestYear - 1))
             .reduce((sum, item) => sum + item['NATURE INCREASE'], 0);
         const lastYearFullSocialIncrease = data.filter(item => item.YEAR === (latestYear - 1))
