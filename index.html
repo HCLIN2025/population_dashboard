@@ -351,16 +351,16 @@ function displayAnnualDashboard(data) {
             .reduce((sum, item) => sum + item['SOCIAL INCREASE'], 0);       
 
         document.getElementById('cumulativeBirthComparison').innerText =
-            `與去年同期比較: ${cumulativeBirthData - lastYearCumulativeBirth}<br>
+            `與去年同期比較: ${cumulativeBirthData - lastYearCumulativeBirth}
             與去年全年比較: ${cumulativeBirthData - lastYearFullBirth}`;
         document.getElementById('cumulativeDeathComparison').innerText =
-            `與去年同期比較: ${cumulativeDeathData - lastYearCumulativeDeath}<br>
+            `與去年同期比較: ${cumulativeDeathData - lastYearCumulativeDeath}
             與去年全年比較: ${cumulativeDeathData - lastYearFullDeath}`;
         document.getElementById('cumulativeNaturalIncreaseComparison').innerText =
-            `與去年同期比較: ${cumulativeNaturalIncreaseData - lastYearCumulativeNaturalIncrease}<br>
+            `與去年同期比較: ${cumulativeNaturalIncreaseData - lastYearCumulativeNaturalIncrease}
             與去年全年比較: ${cumulativeNaturalIncreaseData - lastYearFullNaturalIncrease}`;
         document.getElementById('cumulativeSocialIncreaseComparison').innerText =
-            `與去年同期比較: ${cumulativeSocialIncreaseData - lastYearCumulativeSocialIncrease}<br>
+            `與去年同期比較: ${cumulativeSocialIncreaseData - lastYearCumulativeSocialIncrease}
             與去年全年比較: ${cumulativeSocialIncreaseData - lastYearFullSocialIncrease}`;
     }
 
@@ -377,11 +377,11 @@ function displayAnnualDashboard(data) {
         `與去年全年比較: ${latestPopulation.POPULATION - (lastYearFullPopulation ? lastYearFullPopulation.POPULATION : 0)}`;
 
 // 更新標題
-    document.getElementById('cumulativeBirthTitle').innerText = `${latestYear}年出生人數(截至${latestMonth}月份)`;
-    document.getElementById('cumulativeDeathTitle').innerText = `${latestYear}年死亡人數(截至${latestMonth}月份)`;
-    document.getElementById('cumulativePopulationTitle').innerText = `${latestYear}年總人口數(截至${latestMonth}月份)`;
-    document.getElementById('cumulativeNaturalIncreaseTitle').innerText = `${latestYear}年自然增加(截至${latestMonth}月份)`;
-    document.getElementById('cumulativeSocialIncreaseTitle').innerText = `${latestYear}年社會增加(截至${latestMonth}月份)`;
+    document.getElementById('cumulativeBirthTitle').innerText = `${latestYear}年出生人數(截至${latestMonth}月)`;
+    document.getElementById('cumulativeDeathTitle').innerText = `${latestYear}年死亡人數(截至${latestMonth}月)`;
+    document.getElementById('cumulativePopulationTitle').innerText = `${latestYear}年總人口數(截至${latestMonth}月)`;
+    document.getElementById('cumulativeNaturalIncreaseTitle').innerText = `${latestYear}年自然增加(截至${latestMonth}月)`;
+    document.getElementById('cumulativeSocialIncreaseTitle').innerText = `${latestYear}年社會增加(截至${latestMonth}月)`;
 }
 
 /// 初始化年度滑動條
